@@ -25,6 +25,9 @@ target/
 *.iml
 *.ipr
 
+### VS Code ###
+.vscode/
+
 ### JRebel ###
 rebel.xml
 ### NetBeans ###
@@ -35,11 +38,6 @@ dist/
 nbdist/
 .nb-gradle/
 
-### VS Code ###
-.vscode/
-settings.xml
-setup-dev.sh
-
 ######################################################################
 # Others
 *.log
@@ -49,3 +47,12 @@ setup-dev.sh
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
+
+######################################################################
+# Project Specific
+/docker/mysql/data/
+/docker/mysql/db/*.sql
+/docker/nacos/logs/
+/docker/ruoyi/**/jar/
+
+# 使用 ** 匹配所有子目录下的相应文件
