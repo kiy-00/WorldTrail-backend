@@ -35,6 +35,11 @@ dist/
 nbdist/
 .nb-gradle/
 
+### VS Code ###
+.vscode/
+settings.xml
+setup-dev.sh
+
 ######################################################################
 # Others
 *.log
