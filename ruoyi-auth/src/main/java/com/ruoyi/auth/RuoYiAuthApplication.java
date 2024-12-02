@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
+import org.mybatis.spring.annotation.MapperScan;
 
 /**
  * 认证授权中心
@@ -11,6 +12,7 @@ import com.ruoyi.common.security.annotation.EnableRyFeignClients;
  * @author ruoyi
  */
 @EnableRyFeignClients
+@MapperScan("com.ruoyi.auth.mapper")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class RuoYiAuthApplication
 {
