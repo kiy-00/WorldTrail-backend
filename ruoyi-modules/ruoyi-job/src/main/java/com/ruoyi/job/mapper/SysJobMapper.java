@@ -2,12 +2,14 @@ package com.ruoyi.job.mapper;
 
 import java.util.List;
 import com.ruoyi.job.domain.SysJob;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 调度任务信息 数据层
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysJobMapper
 {
     /**

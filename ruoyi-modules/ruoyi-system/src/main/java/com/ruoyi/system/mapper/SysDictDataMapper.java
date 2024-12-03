@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.system.api.domain.SysDictData;
 
@@ -9,6 +11,7 @@ import com.ruoyi.system.api.domain.SysDictData;
  * 
  * @author ruoyi
  */
+@Mapper
 public interface SysDictDataMapper
 {
     /**

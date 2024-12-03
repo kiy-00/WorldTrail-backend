@@ -2,12 +2,14 @@ package com.ruoyi.gen.mapper;
 
 import java.util.List;
 import com.ruoyi.gen.domain.GenTable;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 业务 数据层
  * 
  * @author ruoyi
  */
+@Mapper
 public interface GenTableMapper
 {
     /**
