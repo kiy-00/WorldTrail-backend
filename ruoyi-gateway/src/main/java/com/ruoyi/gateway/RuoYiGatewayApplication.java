@@ -3,14 +3,12 @@ package com.ruoyi.gateway;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.mybatis.spring.annotation.MapperScan;
 
 /**
  * 网关启动程序
  * 
  * @author ruoyi
  */
-@MapperScan("com.ruoyi.gateway.mapper")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class RuoYiGatewayApplication
 {

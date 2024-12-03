@@ -3,14 +3,12 @@ package com.ruoyi.file;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.mybatis.spring.annotation.MapperScan;
 
 /**
  * 文件服务
  * 
  * @author ruoyi
  */
-@MapperScan("com.ruoyi.file.mapper")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class RuoYiFileApplication
 {

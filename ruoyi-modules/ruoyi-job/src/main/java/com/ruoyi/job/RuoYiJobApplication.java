@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.ruoyi.common.security.annotation.EnableCustomConfig;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
-import org.mybatis.spring.annotation.MapperScan;
 
 /**
  * 定时任务
@@ -12,8 +11,7 @@ import org.mybatis.spring.annotation.MapperScan;
  * @author ruoyi
  */
 @EnableCustomConfig
-@EnableRyFeignClients
-@MapperScan("com.ruoyi.job.mapper")
+@EnableRyFeignClients   
 @SpringBootApplication
 public class RuoYiJobApplication
 {
