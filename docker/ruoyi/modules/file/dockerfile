@@ -1,5 +1,5 @@
 # 基础镜像
-FROM  eclipse-temurin:8-jre
+FROM openjdk:8-jre
 # author
 MAINTAINER ruoyi
 
