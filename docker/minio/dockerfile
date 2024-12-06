@@ -1,0 +1,14 @@
+# 基础镜像
+FROM minio/minio:latest
+
+# 创建数据和配置目录
+RUN mkdir -p /data /root/.minio
+
+# 设置工作目录
+WORKDIR /data
+
+# 暴露端口（服务端口和控制台端口）
+EXPOSE 9000 9001
+
+# 指定默认命令
+CMD ["minio", "server", "/data", "--console-address", ":9001"]

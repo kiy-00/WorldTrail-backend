@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.minio.MinioClient;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Minio 配置信息
  *
@@ -18,6 +20,7 @@ public class MinioConfig
      * 服务地址
      */
     private String url;
+    private Integer port;
 
     /**
      * 用户名
@@ -42,6 +45,12 @@ public class MinioConfig
     public void setUrl(String url)
     {
         this.url = url;
+    }
+    public Integer getPort() {
+        return port;
+    }
+    public void setPort(Integer port) {
+        this.port = port;
     }
 
     public String getAccessKey()
@@ -77,6 +86,10 @@ public class MinioConfig
     @Bean
     public MinioClient getMinioClient()
     {
-        return MinioClient.builder().endpoint(url).credentials(accessKey, secretKey).build();
+        return MinioClient.builder().endpoint(url, port,false).credentials(accessKey, secretKey).build();
     }
+
+
 }
+
+

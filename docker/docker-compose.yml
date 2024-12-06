@@ -97,9 +97,11 @@ services:
     depends_on:
       - ruoyi-redis
       - ruoyi-mysql
+      - ruoyi-mongodb
     links:
       - ruoyi-redis
       - ruoyi-mysql
+      - ruoyi-mongodb
   ruoyi-modules-gen:
     container_name: ruoyi-modules-gen
     build:
@@ -131,6 +133,10 @@ services:
       - "9300:9300"
     volumes:
     - ./ruoyi/uploadPath:/home/ruoyi/uploadPath
+    depends_on:
+      - ruoyi-minio
+    links:
+      - ruoyi-minio
   ruoyi-visual-monitor:
     container_name: ruoyi-visual-monitor
     build:
@@ -138,3 +144,31 @@ services:
       dockerfile: dockerfile
     ports:
       - "9100:9100"
+  ruoyi-minio:
+    container_name: ruoyi-minio
+    image: minio/minio:latest
+    build:
+      context: ./minio
+    ports:
+      - "9000:9000" # MinIO 服务端口
+      - "9001:9001" # MinIO 控制台端口
+    volumes:
+      - ./minio/data:/data # 挂载存储的数据目录
+      - ./minio/config:/root/.minio # 挂载配置目录
+    environment:
+      MINIO_ROOT_USER: minioadmin # 设置用户名
+      MINIO_ROOT_PASSWORD: minioadmin # 设置密码
+    command: server /data --console-address ":9001"
+  ruoyi-mongodb:
+    container_name: ruoyi-mongodb
+    image: mongo:4.4
+    build:
+      context: ./mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb/data:/data/db
+      - ./mongodb/logs:/var/log/mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password

@@ -1,6 +1,10 @@
 # Tomcat
 server:
   port: 9100
+# logs
+logging:
+  file:
+    name: logs/${spring.application.name}/info.log
 
 # Spring
 spring: 

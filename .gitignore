@@ -56,3 +56,7 @@ nbdist/
 /docker/ruoyi/**/jar/
 
 # 使用 ** 匹配所有子目录下的相应文件
+/docker/mongodb/data/
+/docker/mongodb/logs/
+/docker/minio/data/
+/docker/minio/config/
