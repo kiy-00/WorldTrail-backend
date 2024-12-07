@@ -36,6 +36,9 @@ cp ../ruoyi-modules/ruoyi-file/target/ruoyi-modules-file.jar ./ruoyi/modules/fil
 echo "begin copy ruoyi-modules-job "
 cp ../ruoyi-modules/ruoyi-job/target/ruoyi-modules-job.jar ./ruoyi/modules/job/jar
 
-echo "begin copy ruoyi-modules-gen "
-cp ../ruoyi-modules/ruoyi-gen/target/ruoyi-modules-gen.jar ./ruoyi/modules/gen/jar
+#echo "begin copy ruoyi-modules-gen "
+#cp ../ruoyi-modules/ruoyi-gen/target/ruoyi-modules-gen.jar ./ruoyi/modules/gen/jar
+
+echo "begin copy ruoyi-modules-word "
+cp ../ruoyi-modules/word/target/word.jar ./ruoyi/modules/word/jar
 
