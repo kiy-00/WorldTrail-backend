@@ -18,7 +18,6 @@ import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.web.page.TableDataInfo;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
-import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.domain.SysConfig;
 import com.ruoyi.system.service.ISysConfigService;
@@ -38,17 +37,15 @@ public class SysConfigController extends BaseController
     /**
      * 获取参数配置列表
      */
-    @RequiresPermissions("system:config:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysConfig config)
+    public List<SysConfig> list(SysConfig config)
     {
-        startPage();
+
         List<SysConfig> list = configService.selectConfigList(config);
-        return getDataTable(list);
+        return list;
     }
 
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
-    @RequiresPermissions("system:config:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysConfig config)
     {
@@ -78,7 +75,6 @@ public class SysConfigController extends BaseController
     /**
      * 新增参数配置
      */
-    @RequiresPermissions("system:config:add")
     @Log(title = "参数管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysConfig config)
@@ -87,14 +83,12 @@ public class SysConfigController extends BaseController
         {
             return error("新增参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
-        config.setCreateBy(SecurityUtils.getUsername());
         return toAjax(configService.insertConfig(config));
     }
 
     /**
      * 修改参数配置
      */
-    @RequiresPermissions("system:config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysConfig config)
@@ -103,14 +97,12 @@ public class SysConfigController extends BaseController
         {
             return error("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
-        config.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(configService.updateConfig(config));
     }
 
     /**
      * 删除参数配置
      */
-    @RequiresPermissions("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
     public AjaxResult remove(@PathVariable Long[] configIds)
@@ -122,7 +114,6 @@ public class SysConfigController extends BaseController
     /**
      * 刷新参数缓存
      */
-    @RequiresPermissions("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
     public AjaxResult refreshCache()

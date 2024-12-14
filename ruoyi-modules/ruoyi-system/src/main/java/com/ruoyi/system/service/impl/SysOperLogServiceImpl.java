@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService
     @Override
     public int insertOperlog(SysOperLog operLog)
     {
-        return operLogMapper.insertOperlog(operLog);
+        return operLogMapper.insert(operLog);
     }
 
     /**
@@ -39,7 +40,8 @@ public class SysOperLogServiceImpl implements ISysOperLogService
     @Override
     public List<SysOperLog> selectOperLogList(SysOperLog operLog)
     {
-        return operLogMapper.selectOperLogList(operLog);
+        //return operLogMapper.selectOperLogList(operLog);
+        return operLogMapper.selectList(null);
     }
 
     /**
@@ -51,7 +53,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService
     @Override
     public int deleteOperLogByIds(Long[] operIds)
     {
-        return operLogMapper.deleteOperLogByIds(operIds);
+        return operLogMapper.deleteByIds(Arrays.asList(operIds));
     }
 
     /**
@@ -63,7 +65,7 @@ public class SysOperLogServiceImpl implements ISysOperLogService
     @Override
     public SysOperLog selectOperLogById(Long operId)
     {
-        return operLogMapper.selectOperLogById(operId);
+        return operLogMapper.selectById(operId);
     }
 
     /**
@@ -72,6 +74,6 @@ public class SysOperLogServiceImpl implements ISysOperLogService
     @Override
     public void cleanOperLog()
     {
-        operLogMapper.cleanOperLog();
+        operLogMapper.delete(null);
     }
 }

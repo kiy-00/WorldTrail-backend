@@ -43,15 +43,6 @@ public class LoginUser implements Serializable
      */
     private String ipaddr;
 
-    /**
-     * 权限列表
-     */
-    private Set<String> permissions;
-
-    /**
-     * 角色列表
-     */
-    private Set<String> roles;
 
     /**
      * 用户信息
@@ -118,25 +109,6 @@ public class LoginUser implements Serializable
         this.ipaddr = ipaddr;
     }
 
-    public Set<String> getPermissions()
-    {
-        return permissions;
-    }
-
-    public void setPermissions(Set<String> permissions)
-    {
-        this.permissions = permissions;
-    }
-
-    public Set<String> getRoles()
-    {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles)
-    {
-        this.roles = roles;
-    }
 
     public SysUser getSysUser()
     {

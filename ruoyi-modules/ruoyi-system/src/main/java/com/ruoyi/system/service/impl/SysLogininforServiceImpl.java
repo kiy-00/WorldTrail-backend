@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService
     @Override
     public int insertLogininfor(SysLogininfor logininfor)
     {
-        return logininforMapper.insertLogininfor(logininfor);
+        return logininforMapper.insert(logininfor);
     }
 
     /**
@@ -39,7 +40,8 @@ public class SysLogininforServiceImpl implements ISysLogininforService
     @Override
     public List<SysLogininfor> selectLogininforList(SysLogininfor logininfor)
     {
-        return logininforMapper.selectLogininforList(logininfor);
+        //return logininforMapper.selectLogininforList(logininfor);
+        return logininforMapper.selectList(null);
     }
 
     /**
@@ -51,7 +53,7 @@ public class SysLogininforServiceImpl implements ISysLogininforService
     @Override
     public int deleteLogininforByIds(Long[] infoIds)
     {
-        return logininforMapper.deleteLogininforByIds(infoIds);
+        return logininforMapper.deleteByIds(Arrays.asList(infoIds));
     }
 
     /**
@@ -60,6 +62,6 @@ public class SysLogininforServiceImpl implements ISysLogininforService
     @Override
     public void cleanLogininfor()
     {
-        logininforMapper.cleanLogininfor();
+        logininforMapper.delete(null);
     }
 }

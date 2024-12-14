@@ -19,7 +19,6 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.redis.service.RedisService;
 import com.ruoyi.common.security.annotation.InnerAuth;
-import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.system.api.domain.SysLogininfor;
 import com.ruoyi.system.service.ISysLogininforService;
 
@@ -38,17 +37,16 @@ public class SysLogininforController extends BaseController
     @Autowired
     private RedisService redisService;
 
-    @RequiresPermissions("system:logininfor:list")
+
     @GetMapping("/list")
-    public TableDataInfo list(SysLogininfor logininfor)
+    public List<SysLogininfor> list(SysLogininfor logininfor)
     {
-        startPage();
+
         List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
-        return getDataTable(list);
+        return list;
     }
 
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
-    @RequiresPermissions("system:logininfor:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysLogininfor logininfor)
     {
@@ -57,7 +55,7 @@ public class SysLogininforController extends BaseController
         util.exportExcel(response, list, "登录日志");
     }
 
-    @RequiresPermissions("system:logininfor:remove")
+
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable Long[] infoIds)
@@ -65,7 +63,7 @@ public class SysLogininforController extends BaseController
         return toAjax(logininforService.deleteLogininforByIds(infoIds));
     }
 
-    @RequiresPermissions("system:logininfor:remove")
+
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/clean")
     public AjaxResult clean()
@@ -74,7 +72,7 @@ public class SysLogininforController extends BaseController
         return success();
     }
 
-    @RequiresPermissions("system:logininfor:unlock")
+
     @Log(title = "账户解锁", businessType = BusinessType.OTHER)
     @GetMapping("/unlock/{userName}")
     public AjaxResult unlock(@PathVariable("userName") String userName)

@@ -1,22 +1,30 @@
 package com.ruoyi.system.api.domain;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.annotation.Excel.ColumnType;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import lombok.ToString;
 
 /**
  * 系统访问记录表 sys_logininfor
  * 
  * @author ruoyi
  */
+@ToString(callSuper = true)
+@TableName("sys_logininfo")
 public class SysLogininfor extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** ID */
     @Excel(name = "序号", cellType = ColumnType.NUMERIC)
+    @TableId(type = IdType.AUTO)
     private Long infoId;
 
     /** 用户账号 */

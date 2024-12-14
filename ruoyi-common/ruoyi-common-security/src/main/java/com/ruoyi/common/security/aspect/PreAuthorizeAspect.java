@@ -8,8 +8,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.security.annotation.RequiresLogin;
-import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.ruoyi.common.security.annotation.RequiresRoles;
 import com.ruoyi.common.security.auth.AuthUtil;
 
 /**
@@ -81,17 +79,17 @@ public class PreAuthorizeAspect
         }
 
         // 校验 @RequiresRoles 注解
-        RequiresRoles requiresRoles = method.getAnnotation(RequiresRoles.class);
-        if (requiresRoles != null)
-        {
-            AuthUtil.checkRole(requiresRoles);
-        }
-
-        // 校验 @RequiresPermissions 注解
-        RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
-        if (requiresPermissions != null)
-        {
-            AuthUtil.checkPermi(requiresPermissions);
-        }
+//        RequiresRoles requiresRoles = method.getAnnotation(RequiresRoles.class);
+//        if (requiresRoles != null)
+//        {
+//            AuthUtil.checkRole(requiresRoles);
+//        }
+//
+//        // 校验 @RequiresPermissions 注解
+//        RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
+//        if (requiresPermissions != null)
+//        {
+//            AuthUtil.checkPermi(requiresPermissions);
+//        }
     }
 }

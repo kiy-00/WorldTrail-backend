@@ -18,21 +18,7 @@ public interface ISysUserService
      */
     public List<SysUser> selectUserList(SysUser user);
 
-    /**
-     * 根据条件分页查询已分配用户角色列表
-     * 
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    public List<SysUser> selectAllocatedList(SysUser user);
 
-    /**
-     * 根据条件分页查询未分配用户角色列表
-     * 
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    public List<SysUser> selectUnallocatedList(SysUser user);
 
     /**
      * 通过用户名查询用户
@@ -49,22 +35,6 @@ public interface ISysUserService
      * @return 用户对象信息
      */
     public SysUser selectUserById(Long userId);
-
-    /**
-     * 根据用户ID查询用户所属角色组
-     * 
-     * @param userName 用户名
-     * @return 结果
-     */
-    public String selectUserRoleGroup(String userName);
-
-    /**
-     * 根据用户ID查询用户所属岗位组
-     * 
-     * @param userName 用户名
-     * @return 结果
-     */
-    public String selectUserPostGroup(String userName);
 
     /**
      * 校验用户名称是否唯一
@@ -118,7 +88,7 @@ public interface ISysUserService
      * @param user 用户信息
      * @return 结果
      */
-    public boolean registerUser(SysUser user);
+    public int registerUser(SysUser user);
 
     /**
      * 修改用户信息
@@ -128,13 +98,6 @@ public interface ISysUserService
      */
     public int updateUser(SysUser user);
 
-    /**
-     * 用户授权角色
-     * 
-     * @param userId 用户ID
-     * @param roleIds 角色组
-     */
-    public void insertUserAuth(Long userId, Long[] roleIds);
 
     /**
      * 修改用户状态
@@ -169,14 +132,7 @@ public interface ISysUserService
      */
     public int resetPwd(SysUser user);
 
-    /**
-     * 重置用户密码
-     * 
-     * @param userName 用户名
-     * @param password 密码
-     * @return 结果
-     */
-    public int resetUserPwd(String userName, String password);
+
 
     /**
      * 通过用户ID删除用户

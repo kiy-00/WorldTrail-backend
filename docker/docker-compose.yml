@@ -130,17 +130,6 @@ services:
       - ruoyi-redis
       - ruoyi-mysql
       - ruoyi-mongodb
-  ruoyi-modules-gen:
-    container_name: ruoyi-modules-gen
-    build:
-      context: ./ruoyi/modules/gen
-      dockerfile: dockerfile
-    ports:
-      - "9202:9202"
-    depends_on:
-      - ruoyi-mysql
-    links:
-      - ruoyi-mysql
   ruoyi-modules-job:
     container_name: ruoyi-modules-job
     build:

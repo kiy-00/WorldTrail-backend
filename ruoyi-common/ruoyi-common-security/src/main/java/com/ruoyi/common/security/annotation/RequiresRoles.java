@@ -10,17 +10,17 @@ import java.lang.annotation.Target;
  * 
  * @author ruoyi
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.TYPE })
-public @interface RequiresRoles
-{
-    /**
-     * 需要校验的角色标识
-     */
-    String[] value() default {};
-
-    /**
-     * 验证逻辑：AND | OR，默认AND
-     */
-    Logical logical() default Logical.AND;
-}
+//@Retention(RetentionPolicy.RUNTIME)
+//@Target({ ElementType.METHOD, ElementType.TYPE })
+//public @interface RequiresRoles
+//{
+//    /**
+//     * 需要校验的角色标识
+//     */
+//    String[] value() default {};
+//
+//    /**
+//     * 验证逻辑：AND | OR，默认AND
+//     */
+//    Logical logical() default Logical.AND;
+//}

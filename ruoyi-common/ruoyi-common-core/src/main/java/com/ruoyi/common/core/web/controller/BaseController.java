@@ -7,10 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.core.constant.HttpStatus;
 import com.ruoyi.common.core.utils.DateUtils;
-import com.ruoyi.common.core.utils.PageUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.web.page.TableDataInfo;
 
@@ -43,32 +41,32 @@ public class BaseController
     /**
      * 设置请求分页数据
      */
-    protected void startPage()
-    {
-        PageUtils.startPage();
-    }
+//    protected void startPage()
+//    {
+//        PageUtils.startPage();
+//    }
 
     /**
      * 清理分页的线程变量
      */
-    protected void clearPage()
-    {
-        PageUtils.clearPage();
-    }
+//    protected void clearPage()
+//    {
+//        PageUtils.clearPage();
+//    }
 
     /**
      * 响应请求分页数据
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected TableDataInfo getDataTable(List<?> list)
-    {
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(HttpStatus.SUCCESS);
-        rspData.setRows(list);
-        rspData.setMsg("查询成功");
-        rspData.setTotal(new PageInfo(list).getTotal());
-        return rspData;
-    }
+//    protected TableDataInfo getDataTable(List<?> list)
+//    {
+//        TableDataInfo rspData = new TableDataInfo();
+//        rspData.setCode(HttpStatus.SUCCESS);
+//        rspData.setRows(list);
+//        rspData.setMsg("查询成功");
+//        rspData.setTotal(new PageInfo(list).getTotal());
+//        return rspData;
+//    }
 
     /**
      * 返回成功

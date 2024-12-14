@@ -1,22 +1,30 @@
 package com.ruoyi.system.api.domain;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.annotation.Excel.ColumnType;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import lombok.ToString;
 
 /**
  * 操作日志记录表 oper_log
  * 
  * @author ruoyi
  */
+@ToString(callSuper = true)
+@TableName("sys_oper_log")
 public class SysOperLog extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 日志主键 */
     @Excel(name = "操作序号", cellType = ColumnType.NUMERIC)
+    @TableId(type = IdType.AUTO)
     private Long operId;
 
     /** 操作模块 */

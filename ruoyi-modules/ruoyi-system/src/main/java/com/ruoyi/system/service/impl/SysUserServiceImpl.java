@@ -1,15 +1,7 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.ruoyi.common.core.constant.UserConstants;
 import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.core.utils.SpringUtils;
@@ -17,19 +9,18 @@ import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.utils.bean.BeanValidators;
 import com.ruoyi.common.datascope.annotation.DataScope;
 import com.ruoyi.common.security.utils.SecurityUtils;
-import com.ruoyi.system.api.domain.SysRole;
 import com.ruoyi.system.api.domain.SysUser;
-import com.ruoyi.system.domain.SysPost;
-import com.ruoyi.system.domain.SysUserPost;
-import com.ruoyi.system.domain.SysUserRole;
-import com.ruoyi.system.mapper.SysPostMapper;
-import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
-import com.ruoyi.system.mapper.SysUserPostMapper;
-import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.service.ISysConfigService;
-import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.Validator;
+import java.util.List;
 
 /**
  * 用户 业务层处理
@@ -44,23 +35,10 @@ public class SysUserServiceImpl implements ISysUserService
     @Autowired
     private SysUserMapper userMapper;
 
-    @Autowired
-    private SysRoleMapper roleMapper;
-
-    @Autowired
-    private SysPostMapper postMapper;
-
-    @Autowired
-    private SysUserRoleMapper userRoleMapper;
-
-    @Autowired
-    private SysUserPostMapper userPostMapper;
 
     @Autowired
     private ISysConfigService configService;
 
-    @Autowired
-    private ISysDeptService deptService;
 
     @Autowired
     protected Validator validator;
@@ -75,34 +53,10 @@ public class SysUserServiceImpl implements ISysUserService
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserList(SysUser user)
     {
-        return userMapper.selectUserList(user);
+        return userMapper.selectList(null);
     }
 
-    /**
-     * 根据条件分页查询已分配用户角色列表
-     * 
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    @Override
-    @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUser> selectAllocatedList(SysUser user)
-    {
-        return userMapper.selectAllocatedList(user);
-    }
 
-    /**
-     * 根据条件分页查询未分配用户角色列表
-     * 
-     * @param user 用户信息
-     * @return 用户信息集合信息
-     */
-    @Override
-    @DataScope(deptAlias = "d", userAlias = "u")
-    public List<SysUser> selectUnallocatedList(SysUser user)
-    {
-        return userMapper.selectUnallocatedList(user);
-    }
 
     /**
      * 通过用户名查询用户
@@ -113,7 +67,9 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public SysUser selectUserByUserName(String userName)
     {
-        return userMapper.selectUserByUserName(userName);
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getUserName, userName);
+        return userMapper.selectOne(queryWrapper);
     }
 
     /**
@@ -125,42 +81,12 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public SysUser selectUserById(Long userId)
     {
-        return userMapper.selectUserById(userId);
+        return userMapper.selectById(userId);
     }
 
-    /**
-     * 查询用户所属角色组
-     * 
-     * @param userName 用户名
-     * @return 结果
-     */
-    @Override
-    public String selectUserRoleGroup(String userName)
-    {
-        List<SysRole> list = roleMapper.selectRolesByUserName(userName);
-        if (CollectionUtils.isEmpty(list))
-        {
-            return StringUtils.EMPTY;
-        }
-        return list.stream().map(SysRole::getRoleName).collect(Collectors.joining(","));
-    }
 
-    /**
-     * 查询用户所属岗位组
-     * 
-     * @param userName 用户名
-     * @return 结果
-     */
-    @Override
-    public String selectUserPostGroup(String userName)
-    {
-        List<SysPost> list = postMapper.selectPostsByUserName(userName);
-        if (CollectionUtils.isEmpty(list))
-        {
-            return StringUtils.EMPTY;
-        }
-        return list.stream().map(SysPost::getPostName).collect(Collectors.joining(","));
-    }
+
+
 
     /**
      * 校验用户名称是否唯一
@@ -171,9 +97,9 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public boolean checkUserNameUnique(SysUser user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
-        SysUser info = userMapper.checkUserNameUnique(user.getUserName());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        Long userId = StringUtils.isNull(user.getId()) ? -1L : user.getId();
+        SysUser info = userMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, user.getUserName()));
+        if (StringUtils.isNotNull(info) && info.getId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -189,9 +115,9 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public boolean checkPhoneUnique(SysUser user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
-        SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        Long userId = StringUtils.isNull(user.getId()) ? -1L : user.getId();
+        SysUser info = userMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getPhoneNumber, user.getPhoneNumber()));
+        if (StringUtils.isNotNull(info) && info.getId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -207,9 +133,9 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public boolean checkEmailUnique(SysUser user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
-        SysUser info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        Long userId = StringUtils.isNull(user.getId()) ? -1L : user.getId();
+        SysUser info = userMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getEmail, user.getEmail()));
+        if (StringUtils.isNotNull(info) && info.getId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
         }
@@ -224,7 +150,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public void checkUserAllowed(SysUser user)
     {
-        if (StringUtils.isNotNull(user.getUserId()) && user.isAdmin())
+        if (StringUtils.isNotNull(user.getId()) && user.isAdmin())
         {
             throw new ServiceException("不允许操作超级管理员用户");
         }
@@ -241,7 +167,7 @@ public class SysUserServiceImpl implements ISysUserService
         if (!SysUser.isAdmin(SecurityUtils.getUserId()))
         {
             SysUser user = new SysUser();
-            user.setUserId(userId);
+            user.setId(userId);
             List<SysUser> users = SpringUtils.getAopProxy(this).selectUserList(user);
             if (StringUtils.isEmpty(users))
             {
@@ -261,11 +187,7 @@ public class SysUserServiceImpl implements ISysUserService
     public int insertUser(SysUser user)
     {
         // 新增用户信息
-        int rows = userMapper.insertUser(user);
-        // 新增用户岗位关联
-        insertUserPost(user);
-        // 新增用户与角色管理
-        insertUserRole(user);
+        int rows = userMapper.insert(user);
         return rows;
     }
 
@@ -276,9 +198,10 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
-    public boolean registerUser(SysUser user)
+    public int registerUser(SysUser user)
     {
-        return userMapper.insertUser(user) > 0;
+        user.setUserType(UserConstants.NORMAL_TYPE);
+        return userMapper.insert(user);
     }
 
     /**
@@ -291,31 +214,11 @@ public class SysUserServiceImpl implements ISysUserService
     @Transactional(rollbackFor = Exception.class)
     public int updateUser(SysUser user)
     {
-        Long userId = user.getUserId();
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRoleByUserId(userId);
-        // 新增用户与角色管理
-        insertUserRole(user);
-        // 删除用户与岗位关联
-        userPostMapper.deleteUserPostByUserId(userId);
-        // 新增用户与岗位管理
-        insertUserPost(user);
-        return userMapper.updateUser(user);
+        Long userId = user.getId();
+        return userMapper.updateById(user);
     }
 
-    /**
-     * 用户授权角色
-     * 
-     * @param userId 用户ID
-     * @param roleIds 角色组
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void insertUserAuth(Long userId, Long[] roleIds)
-    {
-        userRoleMapper.deleteUserRoleByUserId(userId);
-        insertUserRole(userId, roleIds);
-    }
+
 
     /**
      * 修改用户状态
@@ -326,7 +229,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public int updateUserStatus(SysUser user)
     {
-        return userMapper.updateUser(user);
+        return userMapper.updateById(user);
     }
 
     /**
@@ -338,7 +241,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public boolean updateUserProfile(SysUser user)
     {
-        return userMapper.updateUser(user) > 0;
+        return userMapper.updateById(user) > 0;
     }
 
     /**
@@ -351,7 +254,10 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public boolean updateUserAvatar(String userName, String avatar)
     {
-        return userMapper.updateUserAvatar(userName, avatar) > 0;
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getUserName, userName);
+        updateWrapper.set(SysUser::getAvatar, avatar);
+        return userMapper.update(updateWrapper) > 0;
     }
 
     /**
@@ -363,116 +269,22 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public int resetPwd(SysUser user)
     {
-        return userMapper.updateUser(user);
+        return userMapper.updateById(user);
     }
 
-    /**
-     * 重置用户密码
-     * 
-     * @param userName 用户名
-     * @param password 密码
-     * @return 结果
-     */
+
+
+
     @Override
-    public int resetUserPwd(String userName, String password)
-    {
-        return userMapper.resetUserPwd(userName, password);
+    public int deleteUserById(Long userId) {
+        return 0;
     }
 
-    /**
-     * 新增用户角色信息
-     * 
-     * @param user 用户对象
-     */
-    public void insertUserRole(SysUser user)
-    {
-        this.insertUserRole(user.getUserId(), user.getRoleIds());
-    }
-
-    /**
-     * 新增用户岗位信息
-     * 
-     * @param user 用户对象
-     */
-    public void insertUserPost(SysUser user)
-    {
-        Long[] posts = user.getPostIds();
-        if (StringUtils.isNotEmpty(posts))
-        {
-            // 新增用户与岗位管理
-            List<SysUserPost> list = new ArrayList<SysUserPost>();
-            for (Long postId : posts)
-            {
-                SysUserPost up = new SysUserPost();
-                up.setUserId(user.getUserId());
-                up.setPostId(postId);
-                list.add(up);
-            }
-            userPostMapper.batchUserPost(list);
-        }
-    }
-
-    /**
-     * 新增用户角色信息
-     * 
-     * @param userId 用户ID
-     * @param roleIds 角色组
-     */
-    public void insertUserRole(Long userId, Long[] roleIds)
-    {
-        if (StringUtils.isNotEmpty(roleIds))
-        {
-            // 新增用户与角色管理
-            List<SysUserRole> list = new ArrayList<SysUserRole>();
-            for (Long roleId : roleIds)
-            {
-                SysUserRole ur = new SysUserRole();
-                ur.setUserId(userId);
-                ur.setRoleId(roleId);
-                list.add(ur);
-            }
-            userRoleMapper.batchUserRole(list);
-        }
-    }
-
-    /**
-     * 通过用户ID删除用户
-     * 
-     * @param userId 用户ID
-     * @return 结果
-     */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int deleteUserById(Long userId)
-    {
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRoleByUserId(userId);
-        // 删除用户与岗位表
-        userPostMapper.deleteUserPostByUserId(userId);
-        return userMapper.deleteUserById(userId);
+    public int deleteUserByIds(Long[] userIds) {
+        return 0;
     }
 
-    /**
-     * 批量删除用户信息
-     * 
-     * @param userIds 需要删除的用户ID
-     * @return 结果
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int deleteUserByIds(Long[] userIds)
-    {
-        for (Long userId : userIds)
-        {
-            checkUserAllowed(new SysUser(userId));
-            checkUserDataScope(userId);
-        }
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRole(userIds);
-        // 删除用户与岗位关联
-        userPostMapper.deleteUserPost(userIds);
-        return userMapper.deleteUserByIds(userIds);
-    }
 
     /**
      * 导入用户数据
@@ -498,15 +310,13 @@ public class SysUserServiceImpl implements ISysUserService
             try
             {
                 // 验证是否存在这个用户
-                SysUser u = userMapper.selectUserByUserName(user.getUserName());
+                SysUser u = userMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, user.getUserName()));
                 if (StringUtils.isNull(u))
                 {
                     BeanValidators.validateWithException(validator, user);
-                    deptService.checkDeptDataScope(user.getDeptId());
                     String password = configService.selectConfigByKey("sys.user.initPassword");
                     user.setPassword(SecurityUtils.encryptPassword(password));
-                    user.setCreateBy(operName);
-                    userMapper.insertUser(user);
+                    userMapper.insert(user);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 导入成功");
                 }
@@ -514,11 +324,9 @@ public class SysUserServiceImpl implements ISysUserService
                 {
                     BeanValidators.validateWithException(validator, user);
                     checkUserAllowed(u);
-                    checkUserDataScope(u.getUserId());
-                    deptService.checkDeptDataScope(user.getDeptId());
-                    user.setUserId(u.getUserId());
-                    user.setUpdateBy(operName);
-                    userMapper.updateUser(user);
+                    checkUserDataScope(u.getId());
+                    user.setId(u.getId());
+                    userMapper.updateById(user);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 更新成功");
                 }

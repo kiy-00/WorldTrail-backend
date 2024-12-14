@@ -12,8 +12,6 @@ import com.ruoyi.common.core.utils.SpringUtils;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.security.annotation.Logical;
 import com.ruoyi.common.security.annotation.RequiresLogin;
-import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.ruoyi.common.security.annotation.RequiresRoles;
 import com.ruoyi.common.security.service.TokenService;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.model.LoginUser;
@@ -103,165 +101,20 @@ public class AuthLogic
         tokenService.verifyToken(loginUser);
     }
 
-    /**
-     * 验证用户是否具备某权限
-     * 
-     * @param permission 权限字符串
-     * @return 用户是否具备某权限
-     */
-    public boolean hasPermi(String permission)
-    {
-        return hasPermi(getPermiList(), permission);
-    }
 
-    /**
-     * 验证用户是否具备某权限, 如果验证未通过，则抛出异常: NotPermissionException
-     * 
-     * @param permission 权限字符串
-     * @return 用户是否具备某权限
-     */
-    public void checkPermi(String permission)
-    {
-        if (!hasPermi(getPermiList(), permission))
-        {
-            throw new NotPermissionException(permission);
-        }
-    }
 
-    /**
-     * 根据注解(@RequiresPermissions)鉴权, 如果验证未通过，则抛出异常: NotPermissionException
-     * 
-     * @param requiresPermissions 注解对象
-     */
-    public void checkPermi(RequiresPermissions requiresPermissions)
-    {
-        SecurityContextHolder.setPermission(StringUtils.join(requiresPermissions.value(), ","));
-        if (requiresPermissions.logical() == Logical.AND)
-        {
-            checkPermiAnd(requiresPermissions.value());
-        }
-        else
-        {
-            checkPermiOr(requiresPermissions.value());
-        }
-    }
 
-    /**
-     * 验证用户是否含有指定权限，必须全部拥有
-     *
-     * @param permissions 权限列表
-     */
-    public void checkPermiAnd(String... permissions)
-    {
-        Set<String> permissionList = getPermiList();
-        for (String permission : permissions)
-        {
-            if (!hasPermi(permissionList, permission))
-            {
-                throw new NotPermissionException(permission);
-            }
-        }
-    }
 
-    /**
-     * 验证用户是否含有指定权限，只需包含其中一个
-     * 
-     * @param permissions 权限码数组
-     */
-    public void checkPermiOr(String... permissions)
-    {
-        Set<String> permissionList = getPermiList();
-        for (String permission : permissions)
-        {
-            if (hasPermi(permissionList, permission))
-            {
-                return;
-            }
-        }
-        if (permissions.length > 0)
-        {
-            throw new NotPermissionException(permissions);
-        }
-    }
 
-    /**
-     * 判断用户是否拥有某个角色
-     * 
-     * @param role 角色标识
-     * @return 用户是否具备某角色
-     */
-    public boolean hasRole(String role)
-    {
-        return hasRole(getRoleList(), role);
-    }
 
-    /**
-     * 判断用户是否拥有某个角色, 如果验证未通过，则抛出异常: NotRoleException
-     * 
-     * @param role 角色标识
-     */
-    public void checkRole(String role)
-    {
-        if (!hasRole(role))
-        {
-            throw new NotRoleException(role);
-        }
-    }
 
-    /**
-     * 根据注解(@RequiresRoles)鉴权
-     * 
-     * @param requiresRoles 注解对象
-     */
-    public void checkRole(RequiresRoles requiresRoles)
-    {
-        if (requiresRoles.logical() == Logical.AND)
-        {
-            checkRoleAnd(requiresRoles.value());
-        }
-        else
-        {
-            checkRoleOr(requiresRoles.value());
-        }
-    }
 
-    /**
-     * 验证用户是否含有指定角色，必须全部拥有
-     * 
-     * @param roles 角色标识数组
-     */
-    public void checkRoleAnd(String... roles)
-    {
-        Set<String> roleList = getRoleList();
-        for (String role : roles)
-        {
-            if (!hasRole(roleList, role))
-            {
-                throw new NotRoleException(role);
-            }
-        }
-    }
 
-    /**
-     * 验证用户是否含有指定角色，只需包含其中一个
-     * 
-     * @param roles 角色标识数组
-     */
-    public void checkRoleOr(String... roles)
-    {
-        Set<String> roleList = getRoleList();
-        for (String role : roles)
-        {
-            if (hasRole(roleList, role))
-            {
-                return;
-            }
-        }
-        if (roles.length > 0)
-        {
-            throw new NotRoleException(roles);
-        }
-    }
+
+
+
+
+
 
     /**
      * 根据注解(@RequiresLogin)鉴权
@@ -273,77 +126,12 @@ public class AuthLogic
         this.checkLogin();
     }
 
-    /**
-     * 根据注解(@RequiresRoles)鉴权
-     * 
-     * @param at 注解对象
-     */
-    public void checkByAnnotation(RequiresRoles at)
-    {
-        String[] roleArray = at.value();
-        if (at.logical() == Logical.AND)
-        {
-            this.checkRoleAnd(roleArray);
-        }
-        else
-        {
-            this.checkRoleOr(roleArray);
-        }
-    }
 
-    /**
-     * 根据注解(@RequiresPermissions)鉴权
-     * 
-     * @param at 注解对象
-     */
-    public void checkByAnnotation(RequiresPermissions at)
-    {
-        String[] permissionArray = at.value();
-        if (at.logical() == Logical.AND)
-        {
-            this.checkPermiAnd(permissionArray);
-        }
-        else
-        {
-            this.checkPermiOr(permissionArray);
-        }
-    }
 
-    /**
-     * 获取当前账号的角色列表
-     * 
-     * @return 角色列表
-     */
-    public Set<String> getRoleList()
-    {
-        try
-        {
-            LoginUser loginUser = getLoginUser();
-            return loginUser.getRoles();
-        }
-        catch (Exception e)
-        {
-            return new HashSet<>();
-        }
-    }
 
-    /**
-     * 获取当前账号的权限列表
-     * 
-     * @return 权限列表
-     */
-    public Set<String> getPermiList()
-    {
-        try
-        {
-            LoginUser loginUser = getLoginUser();
-            return loginUser.getPermissions();
-        }
-        catch (Exception e)
-        {
-            return new HashSet<>();
-        }
-    }
+
+
+
 
     /**
      * 判断是否包含权限
