@@ -70,7 +70,7 @@ public class SysConfigServiceImpl implements ISysConfigService
         }
         SysConfig config = new SysConfig();
         config.setConfigKey(configKey);
-        SysConfig retConfig = configMapper.selectById(config);
+        SysConfig retConfig = configMapper.selectOne(new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getConfigKey, configKey));
         if (StringUtils.isNotNull(retConfig))
         {
             redisService.setCacheObject(getCacheKey(configKey), retConfig.getConfigValue());

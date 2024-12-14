@@ -31,14 +31,18 @@ public class HeaderInterceptor implements AsyncHandlerInterceptor
         SecurityContextHolder.setUserId(ServletUtils.getHeader(request, SecurityConstants.DETAILS_USER_ID));
         SecurityContextHolder.setUserName(ServletUtils.getHeader(request, SecurityConstants.DETAILS_USERNAME));
         SecurityContextHolder.setUserKey(ServletUtils.getHeader(request, SecurityConstants.USER_KEY));
-
+        // 从请求中获取token
         String token = SecurityUtils.getToken();
         if (StringUtils.isNotEmpty(token))
         {
+            // 根据token到redis去查询user对象
             LoginUser loginUser = AuthUtil.getLoginUser(token);
+            // user对象不为空（查到了）
             if (StringUtils.isNotNull(loginUser))
             {
+                // 验证当前用户有效期
                 AuthUtil.verifyLoginUserExpire(loginUser);
+                // 安全上下文设置用户信息
                 SecurityContextHolder.set(SecurityConstants.LOGIN_USER, loginUser);
             }
         }

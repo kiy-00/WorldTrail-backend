@@ -92,7 +92,6 @@ public class SysLoginService
         }
         passwordService.validate(user, password);
         recordLogService.recordLogininfor(username, Constants.LOGIN_SUCCESS, "登录成功");
-        recordLoginInfo(user.getId());
         return userInfo;
     }
 

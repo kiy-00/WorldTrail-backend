@@ -38,7 +38,7 @@ public class AuthFilter implements GlobalFilter, Ordered
     @Autowired
     private RedisService redisService;
 
-
+    // 只添加了请求头，请求头的uuid已核验，username、userid来源于原生的jwt
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain)
     {
