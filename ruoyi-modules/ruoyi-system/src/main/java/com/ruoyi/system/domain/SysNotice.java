@@ -2,6 +2,11 @@ package com.ruoyi.system.domain;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.web.domain.BaseEntity;
@@ -12,11 +17,14 @@ import com.ruoyi.common.core.xss.Xss;
  * 
  * @author ruoyi
  */
+@ToString(callSuper = true)
+@TableName("sys_notice")
 public class SysNotice extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 公告ID */
+    @TableId(type = IdType.AUTO)
     private Long noticeId;
 
     /** 公告标题 */
@@ -92,11 +100,8 @@ public class SysNotice extends BaseEntity
             .append("noticeType", getNoticeType())
             .append("noticeContent", getNoticeContent())
             .append("status", getStatus())
-            .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
             .toString();
     }
 }

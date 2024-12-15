@@ -1,10 +1,14 @@
 package com.ruoyi.common.security.utils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.ruoyi.common.core.utils.JwtUtils;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.constant.TokenConstants;
-import com.ruoyi.common.core.context.SecurityContextHolder;
+import com.ruoyi.common.core.context.MySecurityContextHolder;
 import com.ruoyi.common.core.utils.ServletUtils;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.system.api.model.LoginUser;
@@ -16,12 +20,13 @@ import com.ruoyi.system.api.model.LoginUser;
  */
 public class SecurityUtils
 {
+    public static final BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
     /**
      * 获取用户ID
      */
     public static Long getUserId()
     {
-        return SecurityContextHolder.getUserId();
+        return getLoginUser().getUserid();
     }
 
     /**
@@ -29,7 +34,7 @@ public class SecurityUtils
      */
     public static String getUsername()
     {
-        return SecurityContextHolder.getUserName();
+        return getLoginUser().getUsername();
     }
 
     /**
@@ -37,7 +42,7 @@ public class SecurityUtils
      */
     public static String getUserKey()
     {
-        return SecurityContextHolder.getUserKey();
+        return JwtUtils.getUserKey(getLoginUser().getToken());
     }
 
     /**
@@ -45,7 +50,7 @@ public class SecurityUtils
      */
     public static LoginUser getLoginUser()
     {
-        return SecurityContextHolder.get(SecurityConstants.LOGIN_USER, LoginUser.class);
+        return (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     /**
@@ -111,7 +116,6 @@ public class SecurityUtils
      */
     public static boolean matchesPassword(String rawPassword, String encodedPassword)
     {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

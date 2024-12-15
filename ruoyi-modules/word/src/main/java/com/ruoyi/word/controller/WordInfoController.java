@@ -4,7 +4,7 @@ import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.web.page.TableDataInfo;
-import com.ruoyi.common.security.annotation.RequiresPermissions;
+
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.RemoteUserService;
@@ -32,16 +32,17 @@ public class WordInfoController extends BaseController {
     @GetMapping("/list")
     public AjaxResult list(@RequestParam("creator") String creator)
     {
+        SecurityUtils.getUserId();      // -------如何获得用户id，用户对象、用户名同理
         Long uid=SecurityUtils.getUserId();
         return AjaxResult.success("查询成功",wordInfoService.selectWordByCreatorId(uid));
     }
-    @RequiresPermissions("system:notice:list")
+
     @PostMapping("/add")
     public AjaxResult addWord(@ModelAttribute Word word, @RequestParam("file") MultipartFile file)
     {
         return AjaxResult.success("添加成功",wordInfoService.insertWord(word,file));
     }
-    @RequiresPermissions("system:notice:list")
+
     @DeleteMapping("/delete")
     public AjaxResult deleteWord(@RequestBody String id){
         Integer result=wordInfoService.deleteWordById(id);

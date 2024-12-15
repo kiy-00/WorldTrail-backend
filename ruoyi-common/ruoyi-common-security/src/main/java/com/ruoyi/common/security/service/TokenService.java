@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.constant.SecurityConstants;
@@ -48,7 +51,7 @@ public class TokenService
     public Map<String, Object> createToken(LoginUser loginUser)
     {
         String token = IdUtils.fastUUID();
-        Long userId = loginUser.getSysUser().getUserId();
+        Long userId = loginUser.getSysUser().getId();
         String userName = loginUser.getSysUser().getUserName();
         loginUser.setToken(token);
         loginUser.setUserid(userId);
@@ -104,12 +107,14 @@ public class TokenService
             if (StringUtils.isNotEmpty(token))
             {
                 String userkey = JwtUtils.getUserKey(token);
-                user = redisService.getCacheObject(getTokenKey(userkey));
+                Object obj = redisService.getCacheObject(getTokenKey(userkey));
+                user=(LoginUser) obj;
                 return user;
             }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             log.error("获取用户信息异常'{}'", e.getMessage());
         }
         return user;
@@ -171,4 +176,5 @@ public class TokenService
     {
         return ACCESS_TOKEN + token;
     }
+
 }

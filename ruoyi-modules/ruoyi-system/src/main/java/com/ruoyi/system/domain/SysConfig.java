@@ -2,6 +2,11 @@ package com.ruoyi.system.domain;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -13,12 +18,15 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@ToString(callSuper = true)
+@TableName("sys_config")
 public class SysConfig extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 参数主键 */
     @Excel(name = "参数主键", cellType = ColumnType.NUMERIC)
+    @TableId(type = IdType.AUTO)
     private Long configId;
 
     /** 参数名称 */
@@ -36,6 +44,7 @@ public class SysConfig extends BaseEntity
     /** 系统内置（Y是 N否） */
     @Excel(name = "系统内置", readConverterExp = "Y=是,N=否")
     private String configType;
+    private String remark;
 
     public Long getConfigId()
     {
@@ -92,6 +101,15 @@ public class SysConfig extends BaseEntity
     {
         this.configType = configType;
     }
+    @Size(min = 0, max = 50, message = "备注不能超过50个字符")
+    public String getRemark()
+    {
+        return remark;
+    }
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
     
     @Override
     public String toString() {
@@ -101,11 +119,8 @@ public class SysConfig extends BaseEntity
             .append("configKey", getConfigKey())
             .append("configValue", getConfigValue())
             .append("configType", getConfigType())
-            .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
             .toString();
     }
 }

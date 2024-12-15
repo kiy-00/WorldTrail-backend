@@ -23,7 +23,7 @@
         <spring-boot-admin.version>2.7.16</spring-boot-admin.version>
         <tobato.version>1.27.2</tobato.version>
         <kaptcha.version>2.3.3</kaptcha.version>
-        <pagehelper.boot.version>2.0.0</pagehelper.boot.version>
+        <!--pagehelper.boot.version>2.0.0</pagehelper.boot.version-->
         <druid.version>1.2.23</druid.version>
         <dynamic-ds.version>4.3.1</dynamic-ds.version>
         <commons.io.version>2.13.0</commons.io.version>
@@ -134,12 +134,12 @@
                 <version>${kaptcha.version}</version>
             </dependency>
 
-            <!-- pagehelper 分页插件 -->
+            <!-- pagehelper 分页插件>
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.boot.version}</version>
-            </dependency>
+            </dependency -->
 
             <!-- io常用工具类 -->
             <dependency>

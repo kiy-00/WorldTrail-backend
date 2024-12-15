@@ -1,6 +1,12 @@
 package com.ruoyi.auth.service;
 
+import com.ruoyi.common.security.service.SysPasswordService;
+import com.ruoyi.common.security.service.SysRecordLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.core.constant.CacheConstants;
 import com.ruoyi.common.core.constant.Constants;
@@ -10,7 +16,6 @@ import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.enums.UserStatus;
 import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.utils.ip.IpUtils;
 import com.ruoyi.common.redis.service.RedisService;
@@ -25,19 +30,23 @@ import com.ruoyi.system.api.model.LoginUser;
  * @author ruoyi
  */
 @Component
-public class SysLoginService
-{
+public class SysLoginService {
+
     @Autowired
     private RemoteUserService remoteUserService;
 
     @Autowired
-    private SysPasswordService passwordService;
-
-    @Autowired
     private SysRecordLogService recordLogService;
+    @Autowired
+    SysPasswordService passwordService;
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
 
     /**
      * 登录
@@ -71,29 +80,25 @@ public class SysLoginService
             recordLogService.recordLogininfor(username, Constants.LOGIN_FAIL, "很遗憾，访问IP已被列入系统黑名单");
             throw new ServiceException("很遗憾，访问IP已被列入系统黑名单");
         }
-        // 查询用户信息
-        R<LoginUser> userResult = remoteUserService.getUserInfo(username, SecurityConstants.INNER);
 
-        if (R.FAIL == userResult.getCode())
-        {
-            throw new ServiceException(userResult.getMsg());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        if(authentication.getPrincipal()== null) {
+            throw new UsernameNotFoundException("用户不存在");
         }
-
-        LoginUser userInfo = userResult.getData();
-        SysUser user = userResult.getData().getSysUser();
-        if (UserStatus.DELETED.getCode().equals(user.getDelFlag()))
+        LoginUser userInfo = (LoginUser)authentication.getPrincipal();
+        if (userInfo.getSysUser().getDelFlag())
         {
             recordLogService.recordLogininfor(username, Constants.LOGIN_FAIL, "对不起，您的账号已被删除");
             throw new ServiceException("对不起，您的账号：" + username + " 已被删除");
         }
-        if (UserStatus.DISABLE.getCode().equals(user.getStatus()))
+        if (UserStatus.DISABLE.getCode().equals(userInfo.getSysUser().getStatus()))
         {
             recordLogService.recordLogininfor(username, Constants.LOGIN_FAIL, "用户已停用，请联系管理员");
             throw new ServiceException("对不起，您的账号：" + username + " 已停用");
         }
-        passwordService.validate(user, password);
+        passwordService.validate(userInfo.getSysUser(), password);
         recordLogService.recordLogininfor(username, Constants.LOGIN_SUCCESS, "登录成功");
-        recordLoginInfo(user.getUserId());
         return userInfo;
     }
 
@@ -105,11 +110,7 @@ public class SysLoginService
     public void recordLoginInfo(Long userId)
     {
         SysUser sysUser = new SysUser();
-        sysUser.setUserId(userId);
-        // 更新用户登录IP
-        sysUser.setLoginIp(IpUtils.getIpAddr());
-        // 更新用户登录时间
-        sysUser.setLoginDate(DateUtils.getNowDate());
+        sysUser.setId(userId);
         remoteUserService.recordUserLogin(sysUser, SecurityConstants.INNER);
     }
 
