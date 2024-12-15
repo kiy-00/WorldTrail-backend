@@ -32,6 +32,7 @@ public class WordInfoController extends BaseController {
     @GetMapping("/list")
     public AjaxResult list(@RequestParam("creator") String creator)
     {
+        SecurityUtils.getUserId();      // -------如何获得用户id，用户对象、用户名同理
         Long uid=SecurityUtils.getUserId();
         return AjaxResult.success("查询成功",wordInfoService.selectWordByCreatorId(uid));
     }

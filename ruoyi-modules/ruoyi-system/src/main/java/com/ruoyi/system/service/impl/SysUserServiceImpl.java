@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Validator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -200,6 +201,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public int registerUser(SysUser user)
     {
+        user.setCreateTime(new Date());
         user.setUserType(UserConstants.NORMAL_TYPE);
         return userMapper.insert(user);
     }

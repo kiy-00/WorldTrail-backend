@@ -1,16 +1,11 @@
 package com.ruoyi.common.security.auth;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
 import org.springframework.util.PatternMatchUtils;
-import com.ruoyi.common.core.context.SecurityContextHolder;
 import com.ruoyi.common.core.exception.auth.NotLoginException;
-import com.ruoyi.common.core.exception.auth.NotPermissionException;
-import com.ruoyi.common.core.exception.auth.NotRoleException;
 import com.ruoyi.common.core.utils.SpringUtils;
 import com.ruoyi.common.core.utils.StringUtils;
-import com.ruoyi.common.security.annotation.Logical;
 import com.ruoyi.common.security.annotation.RequiresLogin;
 import com.ruoyi.common.security.service.TokenService;
 import com.ruoyi.common.security.utils.SecurityUtils;

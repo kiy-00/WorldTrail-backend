@@ -1,14 +1,10 @@
 package com.ruoyi.common.datascope.aspect;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-import com.ruoyi.common.core.constant.UserConstants;
-import com.ruoyi.common.core.context.SecurityContextHolder;
-import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.core.context.MySecurityContextHolder;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 import com.ruoyi.common.datascope.annotation.DataScope;
@@ -72,7 +68,7 @@ public class DataScopeAspect
             // 如果是超级管理员，则不过滤数据
             if (StringUtils.isNotNull(currentUser) && !currentUser.isAdmin())
             {
-                String permission = StringUtils.defaultIfEmpty(controllerDataScope.permission(), SecurityContextHolder.getPermission());
+                String permission = StringUtils.defaultIfEmpty(controllerDataScope.permission(), MySecurityContextHolder.getPermission());
                 //dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(), controllerDataScope.userAlias(), permission);
             }
         }

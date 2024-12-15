@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.security.utils.SecurityUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -139,12 +141,12 @@ public class SysUserController extends BaseController
     @GetMapping("getInfo")
     public AjaxResult getInfo()
     {
-//        LoginUser loginUser = SecurityUtils.getLoginUser();
-//        SysUser user = loginUser.getSysUser();
-//        AjaxResult ajax = AjaxResult.success();
-//        ajax.put("user", user);
-//        return ajax;
-        return null;
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        SysUser user = loginUser.getSysUser();
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("user", user);
+        return ajax;
+        //return null;
     }
 
     /**

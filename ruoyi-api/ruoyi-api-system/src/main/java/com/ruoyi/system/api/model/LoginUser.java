@@ -1,15 +1,24 @@
 package com.ruoyi.system.api.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.ruoyi.common.core.enums.UserStatus;
+import com.ruoyi.system.api.config.CustomAuthorityDeserializer;
 import com.ruoyi.system.api.domain.SysUser;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * 用户信息
  *
  * @author ruoyi
  */
-public class LoginUser implements Serializable
+public class LoginUser implements Serializable, UserDetails
 {
     private static final long serialVersionUID = 1L;
 
@@ -69,9 +78,51 @@ public class LoginUser implements Serializable
         this.userid = userid;
     }
 
+    @JsonIgnore
+    public Collection<SimpleGrantedAuthority> getAuthorities() {
+        if(UserStatus.BANNED.getCode().equals(sysUser.getStatus()))
+        {
+            return Collections.singleton(new SimpleGrantedAuthority("banned"));
+        }
+        else if(Objects.equals(sysUser.getUserType(), "1"))
+        {
+            return Collections.singleton(new SimpleGrantedAuthority("admin"));
+        }
+        else if(Objects.equals(sysUser.getUserType(), "0"))
+        {
+            return Collections.singleton(new SimpleGrantedAuthority("normal"));
+        }
+        return Collections.singleton(new SimpleGrantedAuthority("visitor"));
+    }
+
+    @Override
+    public String getPassword() {
+        return sysUser.getPassword();
+    }
+
     public String getUsername()
     {
         return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !UserStatus.DISABLE.getCode().equals(sysUser.getStatus());
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return !UserStatus.DELETED.getCode().equals(sysUser.getStatus());
     }
 
     public void setUsername(String username)
