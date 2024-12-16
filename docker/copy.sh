@@ -41,6 +41,6 @@ echo "begin copy ruoyi-modules-job "
 cp ../ruoyi-modules/ruoyi-job/target/ruoyi-modules-job.jar ./ruoyi/modules/job/jar
 
 echo "begin copy ruoyi-modules-word "
-cp ../ruoyi-modules/word/target/word.jar ./ruoyi/modules/word/jar/
+cp ../ruoyi-modules/word/target/word.jar ./ruoyi/modules/word/jar
 
 echo "All files copied successfully!"

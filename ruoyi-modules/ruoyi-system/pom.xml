@@ -42,16 +42,16 @@
         </dependency>
         
         <!-- Mysql Connector -->
-        <dependency>
+        <!--dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-        </dependency>
+        </dependency-->
         
         <!-- RuoYi Common DataSource -->
-        <dependency>
+        <!--dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-common-datasource</artifactId>
-        </dependency>
+        </dependency-->
 
         
         <!-- RuoYi Common DataScope -->

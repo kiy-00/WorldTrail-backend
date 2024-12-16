@@ -132,4 +132,6 @@ public class Constants
      */
     public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "com.ruoyi.common.core.utils.file" };
+    // ZoneId对应的时区
+    public static final String ZONE_ID = "Asia/Shanghai";
 }

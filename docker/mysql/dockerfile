@@ -4,4 +4,4 @@ FROM mysql:5.7
 MAINTAINER ruoyi
 
 # 执行sql脚本
-ADD ./db/*.sql /docker-entrypoint-initdb.d/
+# ADD ./db/*.sql /docker-entrypoint-initdb.d/
