@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.constant.Constants;
 import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.security.utils.SecurityUtils;
-import com.ruoyi.word.repository.UserCheckinMapper;
+import com.ruoyi.word.mapper.UserCheckinMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,8 @@ public class UserService {
         Long uid=SecurityUtils.getLoginUser().getUserid();
         UserCheckin userCheckin=mapper.selectOne(new LambdaQueryWrapper<UserCheckin>()
                 .eq(UserCheckin::getUser_id,uid).orderByDesc(UserCheckin::getId).last("limit 1"));
+        //System.out.println(userCheckin.getUpdateTime().toInstant().atZone(ZoneId.of(Constants.ZONE_ID)).toLocalDate());
+        //System.out.println(LocalDate.now());
         if(userCheckin==null){
             userCheckin=new UserCheckin();
             userCheckin.setUser_id(uid);
@@ -41,10 +43,13 @@ public class UserService {
             userCheckin.setCheckinDays((short)(userCheckin.getCheckinDays()+1));
             mapper.updateById(userCheckin);
         }
-        else {
+        else if(userCheckin.getUpdateTime().toInstant().atZone(ZoneId.of(Constants.ZONE_ID)).toLocalDate().isBefore(LocalDate.now().minusDays(1))){
             userCheckin.setCheckinDays((short)1);
             userCheckin.setUser_id(uid);
             mapper.insert(userCheckin);
+        }
+        else {
+            throw new ServiceException("签到异常");
         }
         return userCheckin.getCheckinDays();
     }

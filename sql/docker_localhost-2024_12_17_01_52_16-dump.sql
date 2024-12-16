@@ -128,7 +128,7 @@ CREATE TABLE `sys_logininfor` (
   PRIMARY KEY (`info_id`),
   KEY `idx_sys_logininfor_lt` (`access_time`),
   KEY `idx_sys_logininfor_s` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统访问记录';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统访问记录';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +137,7 @@ CREATE TABLE `sys_logininfor` (
 
 LOCK TABLES `sys_logininfor` WRITE;
 /*!40000 ALTER TABLE `sys_logininfor` DISABLE KEYS */;
-INSERT INTO `sys_logininfor` VALUES (1,'111','172.19.0.1','1','密码输入错误1次','2024-12-15 22:42:57'),(2,'222','172.19.0.1','0','注册成功','2024-12-15 22:46:43'),(3,'222','172.19.0.1','1','密码输入错误1次','2024-12-15 22:47:22'),(4,'222','172.19.0.1','1','密码输入错误2次','2024-12-15 22:48:48'),(5,'222','172.19.0.1','0','注册成功','2024-12-15 22:56:05'),(6,'222','172.19.0.1','0','登录成功','2024-12-15 22:56:12'),(7,'111','172.19.0.1','0','注册成功','2024-12-15 23:20:22'),(8,'111','172.19.0.1','0','登录成功','2024-12-15 23:20:35');
+INSERT INTO `sys_logininfor` VALUES (1,'111','172.19.0.1','1','密码输入错误1次','2024-12-15 22:42:57'),(2,'222','172.19.0.1','0','注册成功','2024-12-15 22:46:43'),(3,'222','172.19.0.1','1','密码输入错误1次','2024-12-15 22:47:22'),(4,'222','172.19.0.1','1','密码输入错误2次','2024-12-15 22:48:48'),(5,'222','172.19.0.1','0','注册成功','2024-12-15 22:56:05'),(6,'222','172.19.0.1','0','登录成功','2024-12-15 22:56:12'),(7,'111','172.19.0.1','0','注册成功','2024-12-15 23:20:22'),(8,'111','172.19.0.1','0','登录成功','2024-12-15 23:20:35'),(9,'222','172.19.0.1','0','注册成功','2024-12-17 01:07:35'),(10,'222','172.19.0.1','0','登录成功','2024-12-17 01:07:57'),(11,'222','172.19.0.1','0','登录成功','2024-12-17 01:46:39');
 /*!40000 ALTER TABLE `sys_logininfor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,7 +237,7 @@ CREATE TABLE `sys_user` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +246,7 @@ CREATE TABLE `sys_user` (
 
 LOCK TABLES `sys_user` WRITE;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
-INSERT INTO `sys_user` VALUES (1,'111','111','00','','','0','','$2a$10$O7H/5mNoWDalV2aZAjRj.utRO94FntjMl8.p6KJlgPnZF8s19SFom','0',0,'','2024-12-15 23:20:22','2024-12-15 23:20:22');
+INSERT INTO `sys_user` VALUES (1,'111','111','00','','','0','','$2a$10$O7H/5mNoWDalV2aZAjRj.utRO94FntjMl8.p6KJlgPnZF8s19SFom','0',0,'','2024-12-15 23:20:22','2024-12-15 23:20:22'),(2,'222','222','00','','','0','','$2a$10$9v6K7hZ1d/ODxVUUlH8nSubx0YxpqvQQmWfFIdEkSfJH6sPvymztG','0',0,'','2024-12-17 01:07:35','2024-12-17 01:07:35');
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +265,7 @@ CREATE TABLE `user_checkin` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_checkin_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户打卡表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户打卡表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,6 +274,7 @@ CREATE TABLE `user_checkin` (
 
 LOCK TABLES `user_checkin` WRITE;
 /*!40000 ALTER TABLE `user_checkin` DISABLE KEYS */;
+INSERT INTO `user_checkin` VALUES (1,2,1,'2024-12-17 01:33:36');
 /*!40000 ALTER TABLE `user_checkin` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -286,4 +287,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-16 22:52:31
+-- Dump completed on 2024-12-17  1:52:16

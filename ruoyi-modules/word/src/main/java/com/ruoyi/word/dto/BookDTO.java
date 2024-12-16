@@ -1,8 +1,14 @@
 package com.ruoyi.word.dto;
 
 
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Set;
+@Data
+@NoArgsConstructor
 public class BookDTO {
     private String language;
     private String bookName;

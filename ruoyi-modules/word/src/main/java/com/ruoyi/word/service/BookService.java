@@ -8,6 +8,7 @@ import com.ruoyi.word.repository.BookRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -34,7 +35,7 @@ public class BookService {
 
     public Book createBook( BookDTO bookDTO, String createUser) {
         // 构建 Book 实体对象
-        Book book = new Book(bookDTO.getLanguage(),bookDTO.getBookName(),bookDTO.getDescription(),createUser,bookDTO.getWords());
+        Book book = new Book(bookDTO.getLanguage(),bookDTO.getBookName(),bookDTO.getDescription(),createUser,  bookDTO.getWords());
 
         return bookRepository.save(book);
     }

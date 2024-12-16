@@ -42,10 +42,11 @@
         </dependency>
         
         <!-- Mysql Connector -->
-        <!--dependency>
+        <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-        </dependency-->
+            <scope>runtime</scope>
+        </dependency>
         
         <!-- RuoYi Common DataSource -->
         <!--dependency>
