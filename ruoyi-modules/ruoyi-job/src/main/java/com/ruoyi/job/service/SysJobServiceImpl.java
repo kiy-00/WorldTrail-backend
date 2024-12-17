@@ -37,7 +37,7 @@ public class SysJobServiceImpl implements ISysJobService
     public void init() throws SchedulerException, TaskException
     {
         scheduler.clear();
-        List<SysJob> jobList = jobMapper.selectJobAll();
+        List<SysJob> jobList = jobMapper.selectJobList(new SysJob());
         for (SysJob job : jobList)
         {
             ScheduleUtils.createScheduleJob(scheduler, job);
@@ -65,7 +65,7 @@ public class SysJobServiceImpl implements ISysJobService
     @Override
     public SysJob selectJobById(Long jobId)
     {
-        return jobMapper.selectJobById(jobId);
+        return jobMapper.selectById(jobId);
     }
 
     /**
@@ -119,7 +119,7 @@ public class SysJobServiceImpl implements ISysJobService
     {
         Long jobId = job.getJobId();
         String jobGroup = job.getJobGroup();
-        int rows = jobMapper.deleteJobById(jobId);
+        int rows = jobMapper.deleteById(jobId);
         if (rows > 0)
         {
             scheduler.deleteJob(ScheduleUtils.getJobKey(jobId, jobGroup));
@@ -139,7 +139,7 @@ public class SysJobServiceImpl implements ISysJobService
     {
         for (Long jobId : jobIds)
         {
-            SysJob job = jobMapper.selectJobById(jobId);
+            SysJob job = jobMapper.selectById(jobId);
             deleteJob(job);
         }
     }

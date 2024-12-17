@@ -23,6 +23,10 @@ port(){
 	firewall-cmd --add-port=9300/tcp --permanent
 	service firewalld restart
 }
+# 构建模块
+buildServices(){
+  docker-compose build ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word
+}
 
 # 启动基础环境（必须）
 base(){
@@ -60,6 +64,9 @@ case "$1" in
 ;;
 "rm")
 	rm
+;;
+"buildServices")
+  buildServices
 ;;
 *)
 	usage

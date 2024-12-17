@@ -3,6 +3,7 @@ package com.ruoyi.word.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.constant.Constants;
 import com.ruoyi.common.core.exception.ServiceException;
+import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.word.mapper.UserCheckinMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import com.ruoyi.word.entity.users.UserCheckin;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 
 @Service
 public class UserService {
@@ -20,7 +23,6 @@ public class UserService {
     @Autowired
     private UserCheckinMapper mapper;
 
-    private BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
 
     // 每日签到
@@ -28,24 +30,26 @@ public class UserService {
         Long uid=SecurityUtils.getLoginUser().getUserid();
         UserCheckin userCheckin=mapper.selectOne(new LambdaQueryWrapper<UserCheckin>()
                 .eq(UserCheckin::getUser_id,uid).orderByDesc(UserCheckin::getId).last("limit 1"));
-        //System.out.println(userCheckin.getUpdateTime().toInstant().atZone(ZoneId.of(Constants.ZONE_ID)).toLocalDate());
-        //System.out.println(LocalDate.now());
         if(userCheckin==null){
             userCheckin=new UserCheckin();
             userCheckin.setUser_id(uid);
             userCheckin.setCheckinDays((short)1);
             mapper.insert(userCheckin);
+            return 1;
         }
-        else if(userCheckin.getUpdateTime().toInstant().atZone(ZoneId.of(Constants.ZONE_ID)).toLocalDate().equals(LocalDate.now())){
+        if(DateUtils.isSameDay(userCheckin.getUpdateTime(),new Date())){
             throw new ServiceException("今日已签到");
         }
-        else if(userCheckin.getUpdateTime().toInstant().atZone(ZoneId.of(Constants.ZONE_ID)).toLocalDate().equals(LocalDate.now().minusDays(1))){
+        if(DateUtils.isSameDay(userCheckin.getUpdateTime(),DateUtils.addDays(new Date(),-1))){
             userCheckin.setCheckinDays((short)(userCheckin.getCheckinDays()+1));
+            userCheckin.setUpdateTime(new Date());
             mapper.updateById(userCheckin);
         }
-        else if(userCheckin.getUpdateTime().toInstant().atZone(ZoneId.of(Constants.ZONE_ID)).toLocalDate().isBefore(LocalDate.now().minusDays(1))){
-            userCheckin.setCheckinDays((short)1);
+        else if(DateUtils.truncatedCompareTo(userCheckin.getUpdateTime(),new Date(),Calendar.DATE)<0){
+            userCheckin.setId(null);
             userCheckin.setUser_id(uid);
+            userCheckin.setCheckinDays((short)1);
+            userCheckin.setUpdateTime(new Date());
             mapper.insert(userCheckin);
         }
         else {

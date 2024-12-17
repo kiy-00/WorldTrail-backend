@@ -1,6 +1,9 @@
 package com.ruoyi.job.domain;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -11,12 +14,14 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 
  * @author ruoyi
  */
+@TableName("sys_job_log")
 public class SysJobLog extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** ID */
     @Excel(name = "日志序号")
+    @TableId
     private Long jobLogId;
 
     /** 任务名称 */

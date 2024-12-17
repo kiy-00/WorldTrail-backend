@@ -1,6 +1,9 @@
 package com.ruoyi.job.service;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.job.domain.SysJobLog;
@@ -38,7 +41,7 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     @Override
     public SysJobLog selectJobLogById(Long jobLogId)
     {
-        return jobLogMapper.selectJobLogById(jobLogId);
+        return jobLogMapper.selectById(jobLogId);
     }
 
     /**
@@ -49,7 +52,7 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     @Override
     public void addJobLog(SysJobLog jobLog)
     {
-        jobLogMapper.insertJobLog(jobLog);
+        jobLogMapper.insert(jobLog);
     }
 
     /**
@@ -61,7 +64,7 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     @Override
     public int deleteJobLogByIds(Long[] logIds)
     {
-        return jobLogMapper.deleteJobLogByIds(logIds);
+        return jobLogMapper.deleteByIds(Arrays.asList(logIds));
     }
 
     /**
@@ -72,7 +75,7 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     @Override
     public int deleteJobLogById(Long jobId)
     {
-        return jobLogMapper.deleteJobLogById(jobId);
+        return jobLogMapper.deleteById(jobId);
     }
 
     /**
@@ -81,6 +84,6 @@ public class SysJobLogServiceImpl implements ISysJobLogService
     @Override
     public void cleanJobLog()
     {
-        jobLogMapper.cleanJobLog();
+        jobLogMapper.delete(new QueryWrapper<>());
     }
 }

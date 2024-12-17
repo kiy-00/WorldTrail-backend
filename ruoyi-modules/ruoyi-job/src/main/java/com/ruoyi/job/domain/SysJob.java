@@ -3,6 +3,9 @@ package com.ruoyi.job.domain;
 import java.util.Date;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,12 +21,14 @@ import com.ruoyi.job.util.CronUtils;
  * 
  * @author ruoyi
  */
+@TableName("sys_job")
 public class SysJob extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 任务ID */
     @Excel(name = "任务序号", cellType = ColumnType.NUMERIC)
+    @TableId
     private Long jobId;
 
     /** 任务名称 */
