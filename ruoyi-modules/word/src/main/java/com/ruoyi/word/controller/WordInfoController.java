@@ -12,6 +12,7 @@ import com.ruoyi.word.domain.Word;
 import com.ruoyi.word.service.WordInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,7 @@ public class WordInfoController extends BaseController {
 
 
     @GetMapping("/list")
+    @PreAuthorize("hasRole('admin')")
     public AjaxResult list(@RequestParam("creator") String creator)
     {
         SecurityUtils.getUserId();      // -------如何获得用户id，用户对象、用户名同理
@@ -38,12 +40,14 @@ public class WordInfoController extends BaseController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('admin')")
     public AjaxResult addWord(@ModelAttribute Word word, @RequestParam("file") MultipartFile file)
     {
         return AjaxResult.success("添加成功",wordInfoService.insertWord(word,file));
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('admin')")
     public AjaxResult deleteWord(@RequestBody String id){
         Integer result=wordInfoService.deleteWordById(id);
         if(result==0){

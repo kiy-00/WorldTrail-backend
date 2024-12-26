@@ -4,8 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,11 +38,11 @@ public class GlobalExceptionHandler
     /**
      * 权限码异常
      */
-    @ExceptionHandler(NotPermissionException.class)
+    @ExceptionHandler({NotPermissionException.class})
     public AjaxResult handleNotPermissionException(NotPermissionException e, HttpServletRequest request)
     {
         String requestURI = request.getRequestURI();
-        log.error("请求地址'{}',权限码校验失败'{}'", requestURI, e.getMessage());
+        log.error("请求地址'{}',权限校验失败'{}'", requestURI, e.getMessage());
         return AjaxResult.error(HttpStatus.FORBIDDEN, "没有访问权限，请联系管理员授权");
     }
 
@@ -103,7 +105,23 @@ public class GlobalExceptionHandler
         log.error("请求参数类型不匹配'{}',发生系统异常.", requestURI, e);
         return AjaxResult.error(String.format("请求参数类型不匹配，参数[%s]要求类型为：'%s'，但输入值为：'%s'", e.getName(), e.getRequiredType().getName(), value));
     }
+    @ExceptionHandler(AccessDeniedException.class)
+    public AjaxResult handleAccessDeniedException(AccessDeniedException e, HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        log.error("请求地址'{}',发生权限不足异常：{}", requestURI, e.getMessage());
 
+        // 返回自定义权限不足响应
+        return AjaxResult.error("权限不足，无法访问资源");
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public AjaxResult handleAuthenticationException(AuthenticationException e, HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        log.error("请求地址'{}',发生认证失败异常：{}", requestURI, e.getMessage());
+
+        // 返回自定义认证失败响应
+        return AjaxResult.error("身份认证失败，请检查用户名及密码，尝试重新登录");
+    }
     /**
      * 拦截未知的运行时异常
      */

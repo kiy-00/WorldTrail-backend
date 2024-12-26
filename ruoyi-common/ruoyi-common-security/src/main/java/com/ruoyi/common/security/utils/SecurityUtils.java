@@ -3,12 +3,10 @@ package com.ruoyi.common.security.utils;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ruoyi.common.core.utils.JwtUtils;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.constant.TokenConstants;
-import com.ruoyi.common.core.context.MySecurityContextHolder;
 import com.ruoyi.common.core.utils.ServletUtils;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.system.api.model.LoginUser;

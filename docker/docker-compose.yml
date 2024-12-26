@@ -1,7 +1,7 @@
 services:
   ruoyi-nacos:
     container_name: ruoyi-nacos
-    image: nacos/nacos-server:v2.2.3
+    image: nacos/nacos-server
     build:
       context: ./nacos
     environment:
@@ -48,6 +48,13 @@ services:
       - ./redis/conf/redis.conf:/home/ruoyi/redis/redis.conf
       - ./redis/data:/data
     command: redis-server /home/ruoyi/redis/redis.conf
+  ruoyi-redisinsight:
+    container_name: ruoyi-redisinsight
+    image: redis/redisinsight:latest
+    ports:
+      - "5540:5540"
+    links:
+      - ruoyi-redis
   ruoyi-nginx:
     container_name: ruoyi-nginx
     image: nginx

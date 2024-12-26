@@ -3,13 +3,12 @@ import com.ruoyi.common.security.utils.SecurityUtils;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.word.dto.BookDTO;
 import com.ruoyi.word.entity.words.Book;
 import com.ruoyi.word.service.BookService;
 import com.ruoyi.word.service.UserService;
-
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +54,7 @@ public class BookController {
         }
     }
     @PostMapping("/add")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<Book> createBook(@RequestBody BookDTO bookDTO) {
 
         String createUser = SecurityUtils.getUsername();
@@ -62,6 +62,7 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
     }
     @PutMapping("/{bookId}/add-word/{wordId}")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<String> addWordToBook(
             @PathVariable ObjectId bookId,
             @PathVariable String wordId) {
@@ -78,6 +79,7 @@ public class BookController {
         }
     }
     @PutMapping("/{bookId}/remove-word/{wordId}")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<String> removeWordFromBook(
             @PathVariable ObjectId bookId,
             @PathVariable String wordId) {
@@ -97,6 +99,7 @@ public class BookController {
         }
     }
     @DeleteMapping("/{bookId}")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<String> deleteBook(
             @PathVariable ObjectId bookId) {
         try {

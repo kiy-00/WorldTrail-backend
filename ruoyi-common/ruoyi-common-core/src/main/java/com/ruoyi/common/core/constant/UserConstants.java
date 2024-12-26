@@ -13,6 +13,8 @@ public class UserConstants
     public static final String SYS_USER = "SYS_USER";
     public static final String NORMAL_TYPE = "00";
     public static final String ADMIN_TYPE = "11";
+    public static final String USER_ROLE = "ROLE_user";
+    public static final String ADMIN_ROLE = "ROLE_admin";
 
     /** 正常状态 */
     public static final String NORMAL = "0";

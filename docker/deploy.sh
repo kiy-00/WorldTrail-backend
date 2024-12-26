@@ -25,17 +25,21 @@ port(){
 }
 # 构建模块
 buildServices(){
-  docker-compose build ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word
+  docker-compose build --no-cache ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word
 }
 
 # 启动基础环境（必须）
 base(){
-	docker-compose up -d ruoyi-mysql ruoyi-redis ruoyi-nacos
+	docker-compose up -d ruoyi-mysql ruoyi-redis ruoyi-nacos ruoyi-redisinsight
 }
 
 # 启动程序模块（必须）
 modules(){
 	docker-compose up -d ruoyi-nginx ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-minio ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word
+}
+
+rms(){
+  docker rmi -f docker-ruoyi-gateway docker-ruoyi-auth docker-ruoyi-modules-system docker-ruoyi-modules-file docker-ruoyi-modules-job docker-ruoyi-visual-monitor docker-modules-word
 }
 
 # 关闭所有环境/模块
@@ -67,6 +71,9 @@ case "$1" in
 ;;
 "buildServices")
   buildServices
+;;
+"rms")
+  rms
 ;;
 *)
 	usage

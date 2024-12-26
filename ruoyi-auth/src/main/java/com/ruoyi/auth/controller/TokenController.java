@@ -36,7 +36,7 @@ public class TokenController
     {
         // 用户登录
         LoginUser userInfo = sysLoginService.login(form.getUsername(), form.getPassword());
-        // 获取登录token
+        // 获取登录token，该方法也会把用户缓存到redis
         return R.ok(tokenService.createToken(userInfo));
     }
 

@@ -1,18 +1,20 @@
-package com.ruoyi.common.security.interceptor;
+package com.ruoyi.common.security.filter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ruoyi.common.core.constant.TokenConstants;
+import com.ruoyi.common.core.constant.CacheConstants;
+import com.ruoyi.common.core.utils.SpringUtils;
+import com.ruoyi.common.redis.service.RedisService;
+import com.ruoyi.common.security.service.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.ruoyi.common.core.constant.SecurityConstants;
-import com.ruoyi.common.core.utils.StringUtils;
-import com.ruoyi.common.security.auth.AuthUtil;
 import com.ruoyi.system.api.model.LoginUser;
 
 import java.io.IOException;
@@ -23,16 +25,21 @@ import java.io.IOException;
  *
  * @author ruoyi
  */
-//public class HeaderInterceptor implements AsyncHandlerInterceptor
+
 @Component
 public class JWTFilter extends OncePerRequestFilter
 {
+
+    private RedisService redisService= SpringUtils.getBean(RedisService.class);
+
+
     public LoginUser getLoginUserByToken(HttpServletRequest request) {
         //SecurityContextHolder.setUserId(ServletUtils.getHeader(request, SecurityConstants.DETAILS_USER_ID));
         //SecurityContextHolder.setUserName(ServletUtils.getHeader(request, SecurityConstants.DETAILS_USERNAME));
         //SecurityContextHolder.setUserKey(ServletUtils.getHeader(request, SecurityConstants.USER_KEY));
         // 从请求中获取token
         //String token = SecurityUtils.getToken();
+        /*
         String token = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
         if (StringUtils.isNotEmpty(token))
         {
@@ -50,17 +57,19 @@ public class JWTFilter extends OncePerRequestFilter
                 return loginUser;
             }
         }
-        return null;
+        return null;*/
+        String userKey = request.getHeader(SecurityConstants.USER_KEY);
+        return redisService.getCacheObject(userKey);
+
     }
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        LoginUser loginUser = getLoginUserByToken(request);
+        LoginUser loginUser = redisService.getCacheObject(CacheConstants.LOGIN_TOKEN_KEY+request.getHeader(SecurityConstants.USER_KEY));
         if(loginUser != null) {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         }
         filterChain.doFilter(request, response);
 

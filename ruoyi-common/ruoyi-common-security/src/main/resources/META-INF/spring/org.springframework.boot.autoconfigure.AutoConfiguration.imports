@@ -3,7 +3,7 @@ com.ruoyi.common.security.service.SysPasswordService
 com.ruoyi.common.security.service.UserDetailServiceImpl
 com.ruoyi.common.security.aspect.PreAuthorizeAspect
 com.ruoyi.common.security.aspect.InnerAuthAspect
+com.ruoyi.common.security.filter.JWTFilter
 com.ruoyi.common.security.handler.GlobalExceptionHandler
 com.ruoyi.common.security.config.SecurityConfig
 com.ruoyi.common.security.service.SysRecordLogService
-

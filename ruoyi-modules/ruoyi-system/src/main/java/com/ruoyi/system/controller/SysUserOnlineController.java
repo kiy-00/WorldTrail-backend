@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class SysUserOnlineController extends BaseController
     private RedisService redisService;
 
     @GetMapping("/list")
+    @PreAuthorize("hasRole('admin')")
     public List<SysUserOnline> list(String ipaddr, String userName)
     {
         Collection<String> keys = redisService.keys(CacheConstants.LOGIN_TOKEN_KEY + "*");
@@ -73,6 +75,7 @@ public class SysUserOnlineController extends BaseController
      */
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")
+    @PreAuthorize("hasRole('admin')")
     public AjaxResult forceLogout(@PathVariable String tokenId)
     {
         redisService.deleteObject(CacheConstants.LOGIN_TOKEN_KEY + tokenId);

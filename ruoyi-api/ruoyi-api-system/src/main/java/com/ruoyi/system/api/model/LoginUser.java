@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.ruoyi.common.core.constant.UserConstants;
 import com.ruoyi.common.core.enums.UserStatus;
 import com.ruoyi.system.api.config.CustomAuthorityDeserializer;
 import com.ruoyi.system.api.domain.SysUser;
@@ -79,20 +80,20 @@ public class LoginUser implements Serializable, UserDetails
     }
 
     @JsonIgnore
+    @Override
     public Collection<SimpleGrantedAuthority> getAuthorities() {
-        if(UserStatus.BANNED.getCode().equals(sysUser.getStatus()))
+        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if(Objects.equals(sysUser.getUserType(), UserConstants.NORMAL_TYPE)&&Objects.equals(sysUser.getStatus(), UserConstants.NORMAL))
         {
-            return Collections.singleton(new SimpleGrantedAuthority("banned"));
+            authorities.add(new SimpleGrantedAuthority(UserConstants.USER_ROLE));
         }
-        else if(Objects.equals(sysUser.getUserType(), "1"))
+        else if(Objects.equals(sysUser.getUserType(), UserConstants.ADMIN_TYPE))
         {
-            return Collections.singleton(new SimpleGrantedAuthority("admin"));
+            authorities.add(new SimpleGrantedAuthority(UserConstants.ADMIN_ROLE));
+            authorities.add(new SimpleGrantedAuthority(UserConstants.USER_ROLE));
         }
-        else if(Objects.equals(sysUser.getUserType(), "0"))
-        {
-            return Collections.singleton(new SimpleGrantedAuthority("normal"));
-        }
-        return Collections.singleton(new SimpleGrantedAuthority("visitor"));
+
+        return authorities;
     }
 
     @Override
