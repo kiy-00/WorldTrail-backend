@@ -15,7 +15,7 @@ public class Book {
     String language;
     String bookName;
     String description;
-    String createUser;
+    Long createUser;
     Set<String> words;
     @Transient
     int wordCount;
@@ -31,7 +31,7 @@ public class Book {
         this.words = words;
     }
 
-    public Book(String language, String bookName, String description, String createUser, Set<String> words) {
+    public Book(String language, String bookName, String description, Long createUser, Set<String> words) {
         this.language = language;
         this.bookName = bookName;
         this.description = description;
@@ -51,7 +51,7 @@ public class Book {
         return description;
     }
 
-    public String getCreateUser() {
+    public Long getCreateUser() {
         return createUser;
     }
 

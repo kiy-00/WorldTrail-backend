@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Service
-public class UserService {
+public class CheckinService {
 
 
     @Autowired

@@ -1,4 +1,4 @@
-package com.ruoyi.word.dto;
+package com.ruoyi.word.entity.dto;
 
 
 import lombok.AllArgsConstructor;

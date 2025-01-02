@@ -60,3 +60,4 @@ nbdist/
 /docker/mongodb/logs/
 /docker/minio/data/
 /docker/minio/config/
+/docker.zip

@@ -1,29 +1,24 @@
 package com.ruoyi.word.controller;
 
-import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.ruoyi.word.service.UserService;
-
-import java.security.Principal;
-import java.util.Map;
+import com.ruoyi.word.service.CheckinService;
 
 @RestController
 @RequestMapping("/word/user")
-public class UserController {
+public class CheckinController {
 
     @Autowired
-    private UserService userService;
+    private CheckinService checkinService;
 
 
     @PostMapping("/checkin")
     @PreAuthorize("hasRole('user')")
     public AjaxResult dailyCheckin() {
         AjaxResult ajaxResult = AjaxResult.success("签到成功");
-        ajaxResult.put("checkinDays", userService.dailyCheckin());
+        ajaxResult.put("checkinDays", checkinService.dailyCheckin());
         return ajaxResult;
     }
 
@@ -31,7 +26,7 @@ public class UserController {
     @PreAuthorize("hasRole('user')")
     public AjaxResult getCheckinStreak() {
         AjaxResult ajaxResult = AjaxResult.success("获取签到天数成功");
-        ajaxResult.put("checkinDays", userService.getCheckinStreak());
+        ajaxResult.put("checkinDays", checkinService.getCheckinStreak());
         return ajaxResult;
     }
 }

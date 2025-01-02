@@ -134,4 +134,5 @@ public class Constants
             "org.springframework", "org.apache", "com.ruoyi.common.core.utils.file" };
     // ZoneId对应的时区
     public static final String ZONE_ID = "Asia/Shanghai";
+    public static final Long DEFAULT_CREATOR = 0L;
 }

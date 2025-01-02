@@ -1,14 +1,16 @@
 package com.ruoyi.word.service;
-import org.bson.types.ObjectId;
-import org.springframework.stereotype.Service;
-import com.ruoyi.word.dto.BookDTO;
+
+import com.ruoyi.common.core.constant.Constants;
+import com.ruoyi.word.entity.dto.BookDTO;
 import com.ruoyi.word.entity.words.Book;
 import com.ruoyi.word.repository.BookRepository;
+import org.bson.types.ObjectId;
+import org.springframework.stereotype.Service;
+
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class BookService {
@@ -18,29 +20,29 @@ public class BookService {
 
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+
     }
 
-
     // 获取所有指定 createUser 的词书
-    public List<Book> getBooksByCreateUser(String createUser) {
-        return bookRepository.findByCreateUserIn(Arrays.asList(createUser,"system"));
+    public List<Book> getBooksByCreateUser(Long createUser) {
+        return bookRepository.findByCreateUserIn(Arrays.asList(createUser, Constants.DEFAULT_CREATOR));
     }
     public Optional<Book> findById(ObjectId id) {
         return bookRepository.findById(id);
     }
     // 获取所有指定 createUser 和 language 的词
-    public List<Book> getBooksByCreateUserAndLanguage(String createUser, String language) {
-        return  bookRepository.findByCreateUserInAndLanguage(Arrays.asList(createUser,"system"), language);
+    public List<Book> getBooksByCreateUserAndLanguage(Long createUser, String language) {
+        return  bookRepository.findByCreateUserInAndLanguage(Arrays.asList(createUser,Constants.DEFAULT_CREATOR), language);
     }
 
-    public Book createBook( BookDTO bookDTO, String createUser) {
+    public Book createBook(BookDTO bookDTO, Long createUser) {
         // 构建 Book 实体对象
-        Book book = new Book(bookDTO.getLanguage(),bookDTO.getBookName(),bookDTO.getDescription(),createUser,  bookDTO.getWords());
+        Book book = new Book(bookDTO.getLanguage(),bookDTO.getBookName(),bookDTO.getDescription(),createUser,bookDTO.getWords());
 
         return bookRepository.save(book);
     }
 
-    public boolean addWordToBook(ObjectId bookId, String wordId,String createUser) {
+    public boolean addWordToBook(ObjectId bookId, String wordId,Long createUser) {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
 
@@ -59,7 +61,7 @@ public class BookService {
             throw new RuntimeException("Book not found with id: " + bookId);
         }
     }
-    public boolean removeWordFromBook(ObjectId bookId, String wordId, String createUser) {
+    public boolean removeWordFromBook(ObjectId bookId, String wordId, Long createUser) {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
@@ -80,7 +82,7 @@ public class BookService {
             throw new RuntimeException("Book not found with id: " + bookId);
         }
     }
-    public boolean deleteBook(ObjectId bookId, String currentUserId) {
+    public boolean deleteBook(ObjectId bookId, Long currentUserId) {
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
@@ -95,4 +97,8 @@ public class BookService {
             return false;
         }
     }
+    public List<Book> findBooksByWord(String wordId) {
+        return bookRepository.findByWord(wordId);
+    }
+
 }
