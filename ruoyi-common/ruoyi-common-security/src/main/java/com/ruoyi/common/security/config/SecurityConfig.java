@@ -23,7 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @EnableWebSecurity(debug=true)
-@Profile("!ruoyi-file-dev")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
@@ -50,7 +49,7 @@ public class SecurityConfig {
                 .logout().logoutUrl("/auth/logout")
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**/login","/**/register","/**/refresh").permitAll()
+                .antMatchers("/**/login","/**/register","/**/refresh","/user/emailCode").permitAll()
                 .requestMatchers(request ->
                         (SecurityConstants.INNER).equals(request.getHeader(SecurityConstants.FROM_SOURCE))
                 ).permitAll()

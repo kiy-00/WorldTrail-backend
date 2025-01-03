@@ -72,7 +72,7 @@ public class TokenController
     public R<?> register(@RequestBody RegisterBody registerBody)
     {
         // 用户注册
-        sysLoginService.register(registerBody.getUsername(), registerBody.getPassword());
+        sysLoginService.register(registerBody.getUsername(), registerBody.getPassword(),registerBody.getEmailCode(),registerBody.getEmail());
         return R.ok();
     }
 }

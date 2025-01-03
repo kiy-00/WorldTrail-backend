@@ -1,5 +1,5 @@
 # 基础镜像
-FROM
+FROM nacos/nacos-server
 # author
 MAINTAINER ruoyi
 

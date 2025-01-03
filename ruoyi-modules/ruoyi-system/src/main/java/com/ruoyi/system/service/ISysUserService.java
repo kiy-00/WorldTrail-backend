@@ -90,6 +90,8 @@ public interface ISysUserService
      */
     public int registerUser(SysUser user);
 
+
+
     /**
      * 修改用户信息
      * 
@@ -131,6 +133,8 @@ public interface ISysUserService
      * @return 结果
      */
     public int resetPwd(SysUser user);
+    public int resetUserPwd(String username, String password);
+    public int updateUserEmail(String email);
 
 
 

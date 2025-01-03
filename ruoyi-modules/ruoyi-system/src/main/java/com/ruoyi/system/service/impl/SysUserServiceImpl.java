@@ -274,7 +274,22 @@ public class SysUserServiceImpl implements ISysUserService
         return userMapper.updateById(user);
     }
 
+    @Override
+    public int resetUserPwd(String username, String password) {
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getUserName, username);
+        updateWrapper.set(SysUser::getPassword, password);
+        return userMapper.update(updateWrapper);
+    }
 
+    @Override
+    public int updateUserEmail(String email) {
+        Long userId = SecurityUtils.getUserId();
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, userId);
+        updateWrapper.set(SysUser::getEmail, email);
+        return userMapper.update(updateWrapper);
+    }
 
 
     @Override

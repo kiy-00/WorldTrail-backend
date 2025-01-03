@@ -2,6 +2,7 @@ package com.ruoyi.auth.service;
 
 import com.ruoyi.common.security.service.SysPasswordService;
 import com.ruoyi.common.security.service.SysRecordLogService;
+import com.ruoyi.system.api.model.SysUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -122,7 +123,7 @@ public class SysLoginService {
     /**
      * 注册
      */
-    public void register(String username, String password)
+    public void register(String username, String password,String emailCode,String email)
     {
         // 用户名或密码为空 错误
         if (StringUtils.isAnyBlank(username, password))
@@ -141,9 +142,11 @@ public class SysLoginService {
         }
 
         // 注册用户信息
-        SysUser sysUser = new SysUser();
+        SysUserDTO sysUser = new SysUserDTO();
         sysUser.setUserName(username);
         sysUser.setNickName(username);
+        sysUser.setEmailCode(emailCode);
+        sysUser.setEmail(email);
         sysUser.setPassword(SecurityUtils.encryptPassword(password));
         R<?> registerResult = remoteUserService.registerUserInfo(sysUser, SecurityConstants.INNER);
 

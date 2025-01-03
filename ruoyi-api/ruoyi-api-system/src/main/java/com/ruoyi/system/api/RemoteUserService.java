@@ -1,5 +1,6 @@
 package com.ruoyi.system.api;
 
+import com.ruoyi.system.api.model.SysUserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public interface RemoteUserService
      * @return 结果
      */
     @PostMapping("/user/register")
-    public R<Boolean> registerUserInfo(@RequestBody SysUser sysUser, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
+    public R<Boolean> registerUserInfo(@RequestBody SysUserDTO sysUser, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 
     /**
      * 记录用户登录IP地址和登录时间

@@ -7,6 +7,22 @@ spring:
   application:
     # 应用名称
     name: ruoyi-system
+  mail:
+    host: smtp.qq.com
+    username: 2927703699@qq.com
+    password: tzfmnnhfrmutdfcc
+    port: 465
+    protocol: smtp
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+            required: true
   profiles:
     # 环境配置
     active: dev
