@@ -234,6 +234,14 @@ public class SysUserServiceImpl implements ISysUserService
         return userMapper.updateById(user);
     }
 
+    @Override
+    public int updateUserStatus(Long userId, Character status) {
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, userId);
+        updateWrapper.set(SysUser::getStatus, status);
+        return userMapper.update(updateWrapper);
+    }
+
     /**
      * 修改用户基本信息
      * 

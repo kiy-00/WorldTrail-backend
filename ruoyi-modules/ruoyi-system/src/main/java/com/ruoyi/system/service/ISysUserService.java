@@ -108,6 +108,7 @@ public interface ISysUserService
      * @return 结果
      */
     public int updateUserStatus(SysUser user);
+    public int updateUserStatus(Long userId, Character status);
 
     /**
      * 修改用户基本信息

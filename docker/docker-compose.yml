@@ -189,3 +189,14 @@ services:
       - ruoyi-mysql
     links:
       - ruoyi-mysql
+  modules-admin:
+    container_name: modules-admin
+    build:
+      context: ./ruoyi/modules/admin
+      dockerfile: dockerfile
+    ports:
+      - "9206:9206"
+    depends_on:
+      - ruoyi-mysql
+    links:
+      - ruoyi-mysql

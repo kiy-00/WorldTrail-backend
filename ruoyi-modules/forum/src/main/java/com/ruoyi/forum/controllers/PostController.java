@@ -2,6 +2,7 @@ package com.ruoyi.forum.controllers;
 
 
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.security.annotation.InnerAuth;
 import com.ruoyi.forum.entities.DTO.PostDetail;
 import com.ruoyi.forum.entities.DTO.PostDigest;
 import com.ruoyi.forum.entities.Favorite;
@@ -10,7 +11,9 @@ import com.ruoyi.forum.entities.Vote;
 import com.ruoyi.forum.services.FavoriteService;
 import com.ruoyi.forum.services.PostService;
 import com.ruoyi.forum.services.VoteService;
+import com.ruoyi.system.api.model.StatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +39,7 @@ public class PostController {
     @Autowired
     FavoriteService favoriteService;
     // 发帖
+    @PreAuthorize("hasRole('user')")
     @PostMapping("new")
     public R<Long> postPost(@ModelAttribute Post post,
                                @RequestParam("files") List<MultipartFile> files) {
@@ -44,12 +48,31 @@ public class PostController {
     // 查看某帖子详情
     @GetMapping("get")
     public R<PostDetail> getPost(Long id) {
-        return R.ok(postService.getPost(id));
+        PostDetail postDetail = postService.getPost(id,false);
+        return R.ok(postDetail);
     }
+    @InnerAuth
+    @GetMapping("adminGet")
+    public R<PostDetail> adminGetPost(Long id) {
+        PostDetail postDetail = postService.getPost(id,true);
+        return R.ok(postDetail);
+    }
+    @InnerAuth
+    @GetMapping("content")
+    public R<String> getPostContent(Long id) {
+        PostDetail postDetail = postService.getPost(id,false);
+        return R.ok(postDetail.getTitle()+postDetail.getContent());
+    }
+
     // 删除帖子
     @PostMapping("delete")
     public R<Integer> deletePost(@RequestParam("id") Long id) {
         return R.ok(postService.deletePost(id));
+    }
+    @InnerAuth
+    @PostMapping("update")
+    public R<Integer> updatePost(@RequestBody StatusDTO statusDTO) {
+        return R.ok(postService.updatePost(statusDTO.getId(), statusDTO.getStatus()));
     }
 
     @GetMapping("count")
@@ -81,6 +104,7 @@ public class PostController {
         return R.ok(postService.searchPost(keyword,page));
     }
     // 点赞点踩
+    @PreAuthorize("hasRole('user')")
     @PostMapping("vote")
     public R<Integer> votePost(@RequestBody Vote vote) {
         return R.ok(voteService.vote(vote));

@@ -17,7 +17,7 @@ public class PostDetail extends Post {
         this.setUserId(post.getUserId());
         this.setTitle(post.getTitle());
         this.setContent(post.getContent());
-        this.setDeleted(post.getDeleted());
+        this.setStatus(post.getStatus());
         this.setCreatedTime(post.getCreatedTime());
         this.setUpdatedTime(post.getUpdatedTime());
     }

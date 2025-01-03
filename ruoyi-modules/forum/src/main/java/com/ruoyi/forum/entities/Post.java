@@ -2,6 +2,7 @@ package com.ruoyi.forum.entities;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ruoyi.forum.entities.BaseEntities.BaseEntity;
 import lombok.Data;
 
@@ -19,7 +20,8 @@ public class Post extends BaseEntity implements Serializable {
 
     private String content;
 
-    private Boolean deleted;
+    private Character status='0';
     @TableField(exist = false)
     private Date updatedTime;
+
 }

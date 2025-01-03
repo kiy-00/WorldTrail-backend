@@ -4,9 +4,11 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.common.core.constant.SecurityConstants;
 import com.ruoyi.common.core.constant.UserConstants;
 import com.ruoyi.common.redis.service.RedisService;
 import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.system.api.model.StatusDTO;
 import com.ruoyi.system.api.model.SysUserDTO;
 import com.ruoyi.system.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +101,11 @@ public class SysUserController extends BaseController
             return R.fail("注册用户'" + username + "'失败，登录账号已存在");
         }
         return R.ok(result);
+    }
+    @InnerAuth
+    @PostMapping("/status")
+    public R<Integer> updateUserStatus(@RequestBody StatusDTO statusDTO){
+        return R.ok(userService.updateUserStatus(statusDTO.getId(),statusDTO.getStatus()));
     }
 
 

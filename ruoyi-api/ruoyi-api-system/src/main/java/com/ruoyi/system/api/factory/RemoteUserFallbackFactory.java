@@ -1,5 +1,6 @@
 package com.ruoyi.system.api.factory;
 
+import com.ruoyi.system.api.model.StatusDTO;
 import com.ruoyi.system.api.model.SysUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,11 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
             public R<Boolean> recordUserLogin(SysUser sysUser, String source)
             {
                 return R.fail("记录用户登录信息失败:" + throwable.getMessage());
+            }
+
+            @Override
+            public R<Boolean> updateUserStatus(StatusDTO statusDTO, String source) {
+                return R.fail("更新用户状态失败:" + throwable.getMessage());
             }
         };
     }

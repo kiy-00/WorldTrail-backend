@@ -3,6 +3,7 @@ package com.ruoyi.forum.services;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.constant.SecurityConstants;
+import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.forum.entities.Comment;
 import com.ruoyi.forum.entities.DTO.PostDetail;
@@ -49,7 +50,7 @@ public class PostService {
         Long uid = SecurityUtils.getUserId();
         List<PostImage> postImageList=new ArrayList<>();
         post.setUserId(uid);
-        post.setDeleted(false);
+        post.setStatus('0');
         postMapper.insert(post);
         if(files!=null&&!files.isEmpty()) {
             for (MultipartFile file : files) {
@@ -68,9 +69,9 @@ public class PostService {
     }
 
 
-    public PostDetail getPost(Long id) {
+    public PostDetail getPost(Long id,boolean isInner) {
         Post post=postMapper.selectById(id);
-        if(post!=null && !post.getDeleted()){
+        if(post!=null && (post.getStatus()=='0'||isInner)){
             PostDetail postDetail=new PostDetail(post);
             LoginUser loginUser=remoteUserService.getUserInfo(post.getUserId(), SecurityConstants.INNER).getData();
             postDetail.setUsername(loginUser.getSysUser().getNickName());
@@ -87,6 +88,7 @@ public class PostService {
         return null;
     }
 
+
     public Long countPost() {
         return postMapper.selectCount(new QueryWrapper<Post>().eq("deleted", false));
     }
@@ -98,7 +100,7 @@ public class PostService {
         Post post=postMapper.selectById(id);
         Long uid = SecurityUtils.getUserId();
         if(Objects.equals(post.getUserId(), uid)) {
-            post.setDeleted(true);
+            post.setStatus('1');
             postMapper.updateById(post);
             return 200;
         }
@@ -155,5 +157,14 @@ public class PostService {
                     return postDigest;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Integer updatePost(Long id, Character status) {
+        if (status ==  '1') {
+            throw new ServiceException("权限不足");
+        }
+        Post post = postMapper.selectById(id);
+        post.setStatus(status);
+        return postMapper.updateById(post);
     }
 }

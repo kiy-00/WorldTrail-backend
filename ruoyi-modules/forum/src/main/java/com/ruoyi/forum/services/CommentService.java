@@ -1,5 +1,6 @@
 package com.ruoyi.forum.services;
 
+import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.forum.entities.Comment;
 import com.ruoyi.forum.entities.DTO.CommentDetail;
@@ -18,7 +19,7 @@ public class CommentService  {
     public Long postComment(Comment comment) {
         Long uid= SecurityUtils.getUserId();
         comment.setUserId(uid);
-        comment.setDeleted(false);
+        comment.setStatus('0');
         commentMapper.insert(comment);
         return comment.getId();
     }
@@ -28,7 +29,7 @@ public class CommentService  {
         Comment comment = commentMapper.selectById(id);
         Long uid= SecurityUtils.getUserId();
         if(comment.getUserId().equals(uid)){
-            comment.setDeleted(true);
+            comment.setStatus('1');
             commentMapper.updateById(comment);
             return 200;
         }
@@ -42,11 +43,22 @@ public class CommentService  {
         for(CommentDetail c : list){
             if(c.getUserId().equals(uid))
                 c.setIsMyComment(true);
-            if(c.getDeleted())
+            if(c.getStatus()!='0')
                 c.setContent("[该评论已被删除]");
         }
         return list;
     }
 
 
+    public Object getComment(Long commentId) {
+        return commentMapper.selectById(commentId);
+    }
+
+    public Integer updateComment(Long id, Character status) {
+        if (status=='1')
+            throw new ServiceException("权限不足");
+        Comment comment = commentMapper.selectById(id);
+        comment.setStatus(status);
+        return commentMapper.updateById(comment);
+    }
 }
