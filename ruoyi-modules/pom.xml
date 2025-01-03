@@ -13,6 +13,7 @@
         <module>ruoyi-job</module>
         <module>ruoyi-file</module>
         <module>word</module>
+        <module>forum</module>
     </modules>
 
     <artifactId>ruoyi-modules</artifactId>

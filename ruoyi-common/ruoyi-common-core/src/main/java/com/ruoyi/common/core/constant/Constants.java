@@ -135,4 +135,6 @@ public class Constants
     // ZoneId对应的时区
     public static final String ZONE_ID = "Asia/Shanghai";
     public static final Long DEFAULT_CREATOR = 0L;
+    public static final String AVATAR_PATH = "/avatar/";
+    public static final String POST_IMAGE_PATH = "post-images";
 }

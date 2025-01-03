@@ -1,5 +1,6 @@
 package com.ruoyi.file.controller;
 
+import com.ruoyi.common.security.annotation.InnerAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class SysFileController
     /**
      * 文件上传请求
      */
-    @PostMapping("upload")
+    @InnerAuth
+    @PostMapping("/upload")
     public R<SysFile> upload(MultipartFile file)
     {
         try

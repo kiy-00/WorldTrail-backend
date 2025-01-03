@@ -9,6 +9,9 @@ import com.ruoyi.common.core.constant.UserConstants;
 import com.ruoyi.common.core.enums.UserStatus;
 import com.ruoyi.system.api.config.CustomAuthorityDeserializer;
 import com.ruoyi.system.api.domain.SysUser;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +22,9 @@ import org.springframework.security.core.userdetails.UserDetails;
  *
  * @author ruoyi
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginUser implements Serializable, UserDetails
 {
     private static final long serialVersionUID = 1L;
@@ -58,6 +64,13 @@ public class LoginUser implements Serializable, UserDetails
      * 用户信息
      */
     private SysUser sysUser;
+    public LoginUser(SysUser sysUser)
+    {
+        this.sysUser = sysUser;
+        userid = sysUser.getId();
+        username = sysUser.getUserName();
+    }
+
 
     public String getToken()
     {

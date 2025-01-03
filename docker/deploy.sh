@@ -25,7 +25,7 @@ port(){
 }
 # 构建模块
 buildServices(){
-  docker-compose build --no-cache ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word
+  docker-compose build --no-cache ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word modules-forum
 }
 
 # 启动基础环境（必须）
@@ -35,11 +35,11 @@ base(){
 
 # 启动程序模块（必须）
 modules(){
-	docker-compose up -d ruoyi-nginx ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-minio ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word
+	docker-compose up -d ruoyi-nginx ruoyi-gateway ruoyi-auth ruoyi-modules-system ruoyi-minio ruoyi-modules-file ruoyi-modules-job ruoyi-visual-monitor modules-word modules-forum
 }
 
 rms(){
-  docker rmi -f docker-ruoyi-gateway docker-ruoyi-auth docker-ruoyi-modules-system docker-ruoyi-modules-file docker-ruoyi-modules-job docker-ruoyi-visual-monitor docker-modules-word
+  docker rmi -f docker-ruoyi-gateway docker-ruoyi-auth docker-ruoyi-modules-system docker-ruoyi-modules-file docker-ruoyi-modules-job docker-ruoyi-visual-monitor docker-modules-word docker-modules-forum
 }
 
 # 关闭所有环境/模块

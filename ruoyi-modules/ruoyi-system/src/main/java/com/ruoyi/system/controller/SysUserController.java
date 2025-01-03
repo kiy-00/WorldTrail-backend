@@ -102,8 +102,19 @@ public class SysUserController extends BaseController
         {
             return R.fail("用户名或密码错误");
         }
-        LoginUser sysUserVo = new LoginUser();
-        sysUserVo.setSysUser(sysUser);
+        LoginUser sysUserVo = new LoginUser(sysUser);
+        return R.ok(sysUserVo);
+    }
+    @InnerAuth
+    @GetMapping("/info/id/{uid}")
+    public R<LoginUser> info(@PathVariable("uid") Long uid)
+    {
+        SysUser sysUser = userService.selectUserById(uid);
+        if (StringUtils.isNull(sysUser))
+        {
+            return R.fail("不存在用户");
+        }
+        LoginUser sysUserVo = new LoginUser(sysUser);
         return R.ok(sysUserVo);
     }
 

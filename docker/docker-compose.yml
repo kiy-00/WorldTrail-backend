@@ -178,3 +178,14 @@ services:
       - ruoyi-mongodb
     links:
       - ruoyi-mongodb
+  modules-forum:
+    container_name: modules-forum
+    build:
+      context: ./ruoyi/modules/forum
+      dockerfile: dockerfile
+    ports:
+      - "9205:9205"
+    depends_on:
+      - ruoyi-mysql
+    links:
+      - ruoyi-mysql

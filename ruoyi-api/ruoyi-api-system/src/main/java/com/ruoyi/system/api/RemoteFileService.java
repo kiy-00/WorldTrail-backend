@@ -1,9 +1,11 @@
 package com.ruoyi.system.api;
 
+import com.ruoyi.common.core.constant.SecurityConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.core.constant.ServiceNameConstants;
@@ -27,5 +29,5 @@ public interface RemoteFileService
      * @return 结果
      */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public R<SysFile> upload(@RequestPart(value = "file") MultipartFile file);
+    public R<SysFile> upload(@RequestPart(value = "file") MultipartFile file, @RequestHeader(SecurityConstants.FROM_SOURCE) String source);
 }

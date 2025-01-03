@@ -1,26 +1,20 @@
-package com.ruoyi.file;
+package com.ruoyi.forum;
 
 import com.ruoyi.common.security.annotation.EnableCustomConfig;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
-/**
- * 文件服务
- * 
- * @author ruoyi
- */
-@EnableRyFeignClients
+// 启动类
+@SpringBootApplication
 @EnableCustomConfig
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, SecurityAutoConfiguration.class })
-public class RuoYiFileApplication
-{
-    public static void main(String[] args)
-    {
-        SpringApplication.run(RuoYiFileApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  文件服务模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
+@EnableRyFeignClients
+public class ForumApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ForumApplication.class, args);
+        System.out.println("(♥◠‿◠)ﾉﾞ  社区模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 " .-------.       ____     __        \n" +
                 " |  _ _   \\      \\   \\   /  /    \n" +
                 " | ( ' )  |       \\  _. /  '       \n" +
@@ -31,4 +25,5 @@ public class RuoYiFileApplication
                 " |  |  \\    /  \\      /           \n" +
                 " ''-'   `'-'    `-..-'              ");
     }
+
 }
