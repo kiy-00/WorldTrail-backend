@@ -90,7 +90,7 @@ public class PostService {
 
 
     public Long countPost() {
-        return postMapper.selectCount(new QueryWrapper<Post>().eq("deleted", false));
+        return postMapper.selectCount(new QueryWrapper<Post>().eq("status", '0'));
     }
     public Long searchPostCount(String keyword) {
         return postMapper.selectCount(new QueryWrapper<Post>().like("title", keyword).eq("deleted", false));
@@ -110,28 +110,28 @@ public class PostService {
 
     public List<PostDigest> listPost(Integer page) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("deleted", false).orderByDesc("id");
+        queryWrapper.eq("status", '0').orderByDesc("id");
         return pageSearch(PAGE_SIZE,page,queryWrapper);
     }
 
 
     public List<PostDigest> listPostByUser(Long uid,Integer page) {
         QueryWrapper<Post> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id",uid).eq("deleted", false).orderByDesc("id");
+        wrapper.eq("user_id",uid).eq("status", '0').orderByDesc("id");
         return pageSearch(PAGE_SIZE,page,wrapper);
     }
 
 
     public List<PostDigest> randomPost() {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("deleted", false).orderByAsc("RAND()").last("LIMIT 10");
+        queryWrapper.eq("status", '0').orderByAsc("RAND()").last("LIMIT 10");
         return pageSearch(10, 1, queryWrapper);
     }
 
 
     public List<PostDigest> searchPost(String keyword,Integer page) {
         QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("title", keyword).eq("deleted", false).orderByDesc("id");
+        queryWrapper.like("title", keyword).eq("status", '0').orderByDesc("id");
         return pageSearch(PAGE_SIZE,page,queryWrapper);
     }
 

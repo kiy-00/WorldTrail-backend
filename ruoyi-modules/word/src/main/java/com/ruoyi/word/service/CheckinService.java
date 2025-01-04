@@ -12,8 +12,8 @@ import com.ruoyi.word.entity.users.UserCheckin;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CheckinService {
@@ -72,6 +72,51 @@ public class CheckinService {
             return 0;
         }
         return userCheckin.getCheckinDays();
+    }
+
+    public List<Integer> getCheckinDates(Integer year, Integer month) {
+        Long uid = SecurityUtils.getUserId();
+
+        // 创建查询条件，查询该用户的打卡记录
+        LambdaQueryWrapper<UserCheckin> query = new LambdaQueryWrapper<>();
+        query.eq(UserCheckin::getUser_id, uid).orderByDesc(UserCheckin::getId);
+        List<UserCheckin> userCheckins = mapper.selectList(query);
+
+        // 用来存储该月的所有打卡日期
+        Set<Integer> checkinDates = new TreeSet<>();
+
+        // 遍历所有的打卡记录
+        for (UserCheckin userCheckin : userCheckins) {
+            // 获取打卡的最后一天
+            LocalDate endDate = userCheckin.getUpdateTime().toInstant()
+                    .atZone(ZoneId.of(Constants.ZONE_ID)) // 获取系统默认时区的 ZONE
+                    .toLocalDate();
+
+            // 获取打卡的开始日期
+            LocalDate startDate = endDate.minusDays(userCheckin.getCheckinDays() - 1);
+            if (endDate.isBefore(LocalDate.of(year, month, 1))) {
+                continue;
+            }
+            LocalDate lastDayOfMonth = LocalDate.of(year, month, 1).plusMonths(1).minusDays(1);
+            if (startDate.isAfter(lastDayOfMonth)) {
+                continue;
+            }
+
+            // 遍历该用户的打卡日期范围
+            LocalDate currentDate = startDate;
+            while (!currentDate.isAfter(endDate)) {
+                // 如果日期属于该月，则加入到打卡日期集合
+                if (currentDate.getYear() == year && currentDate.getMonthValue() == month) {
+                    // 将日期格式化为yyyyMMdd并转换为Integer类型
+                    checkinDates.add(currentDate.getDayOfMonth());
+                }
+                currentDate = currentDate.plusDays(1);
+
+            }
+        }
+
+        // 返回该月的打卡日期列表
+        return new ArrayList<>(checkinDates);
     }
 
 }
