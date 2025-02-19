@@ -2,6 +2,7 @@
 
 # 创建所有必需的目录
 echo "Creating required directories..."
+
 mkdir -p ./mysql/db
 mkdir -p ./nginx/html/dist
 mkdir -p ./ruoyi/gateway/jar
@@ -11,6 +12,8 @@ mkdir -p ./ruoyi/modules/system/jar
 mkdir -p ./ruoyi/modules/file/jar
 mkdir -p ./ruoyi/modules/job/jar
 mkdir -p ./ruoyi/modules/word/jar
+mkdir -p ./ruoyi/modules/admin/jar
+mkdir -p ./ruoyi/modules/forum/jar
 
 # 复制 sql
 #echo "begin copy sql "
