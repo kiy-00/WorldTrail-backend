@@ -16,9 +16,9 @@ mkdir -p ./ruoyi/modules/admin/jar
 mkdir -p ./ruoyi/modules/forum/jar
 
 # 复制 sql
-#echo "begin copy sql "
-#cp ../sql/ry_20240629.sql ./mysql/db
-#cp ../sql/ry_config_20240902.sql ./mysql/db
+# echo "begin copy sql "
+# cp ../sql/ry_20240629.sql ./mysql/db
+# cp ../sql/ry_config_20240902.sql ./mysql/db
 
 # 复制 html
 echo "begin copy html "
